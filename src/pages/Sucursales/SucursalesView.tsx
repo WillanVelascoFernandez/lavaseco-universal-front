@@ -29,41 +29,6 @@ export const SucursalesView: React.FC<SucursalesViewProps> = ({ branches, stats 
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Card noPadding className="p-5 border-none shadow-sm bg-white">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-blue/10 rounded-xl text-brand-blue">
-                            <Building2 size={24} />
-                        </div>
-                        <div>
-                            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Total Sucursales</p>
-                            <h3 className="text-2xl font-bold text-brand-dark">{stats.totalBranches}</h3>
-                        </div>
-                    </div>
-                </Card>
-                <Card noPadding className="p-5 border-none shadow-sm bg-white">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-green-50 rounded-xl text-green-600">
-                            <TrendingUp size={24} />
-                        </div>
-                        <div>
-                            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Recaudación Total</p>
-                            <h3 className="text-2xl font-bold text-brand-dark">Bs. {stats.totalRevenue.toLocaleString()}</h3>
-                        </div>
-                    </div>
-                </Card>
-                <Card noPadding className="p-5 border-none shadow-sm bg-white">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-accent/10 rounded-xl text-brand-accent">
-                            <Users size={24} />
-                        </div>
-                        <div>
-                            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Usuarios Totales</p>
-                            <h3 className="text-2xl font-bold text-brand-dark">{stats.totalUsers}</h3>
-                        </div>
-                    </div>
-                </Card>
-            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {branches.map(branch => (

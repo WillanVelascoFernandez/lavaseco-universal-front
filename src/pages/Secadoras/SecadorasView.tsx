@@ -81,17 +81,25 @@ export const SecadorasView: React.FC<SecadorasViewProps> = ({ secadoras, handleT
                             </div>
                         </div>
 
-                        {machine.status === 'en_uso' && (
-                            <div className="animate-in slide-in-from-top-2 duration-300">
-                                <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
-                                    <p className="text-[10px] text-blue-400 uppercase font-black tracking-widest mb-1">Calor Seleccionado</p>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-sm font-bold text-blue-700">{machine.lastCycle.type}</span>
-                                        <span className="text-xs font-medium text-blue-500">{machine.lastCycle.temp}</span>
-                                    </div>
-                                </div>
+                        <div className={`mt-4 p-3 rounded-xl border transition-all duration-300 ${machine.status === 'en_uso'
+                                ? 'bg-blue-50 border-blue-100'
+                                : 'bg-gray-100/50 border-gray-100 opacity-60'
+                            }`}>
+                            <p className={`text-[10px] uppercase font-black tracking-widest mb-1 ${machine.status === 'en_uso' ? 'text-blue-400' : 'text-gray-400'
+                                }`}>
+                                Ciclo Actual
+                            </p>
+                            <div className="flex justify-between items-center">
+                                <span className={`text-sm font-bold ${machine.status === 'en_uso' ? 'text-blue-700' : 'text-gray-500'
+                                    }`}>
+                                    {machine.status === 'en_uso' ? machine.lastCycle.type : 'Ninguno'}
+                                </span>
+                                <span className={`text-xs font-medium ${machine.status === 'en_uso' ? 'text-blue-500' : 'text-gray-400'
+                                    }`}>
+                                    {machine.status === 'en_uso' ? machine.lastCycle.time : '--:--'}
+                                </span>
                             </div>
-                        )}
+                        </div>
                     </Card>
                 ))}
             </div>

@@ -65,7 +65,7 @@ export const UsuariosView: React.FC<UsuariosViewProps> = ({ users, stats }) => {
                 </Card>
             </div>
 
-            <Card overflowVisible title="Lista de Personal" subtitle="Visualiza y gestiona los permisos de cada usuario.">
+            <Card overflowVisible>
                 <div className="overflow-x-auto -mx-6">
                     <table className="w-full text-left border-collapse">
                         <thead>

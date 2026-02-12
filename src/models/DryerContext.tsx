@@ -13,8 +13,8 @@ interface DryerContextType {
 const DryerContext = createContext<DryerContextType | undefined>(undefined);
 
 const initialDryers: Dryer[] = [
-    { id: 'S01', branchId: 'SANTOS DUMONT', status: 'deshabilitado', enabled: false, usageCount: 95, revenue: 1900, lastCycle: { time: '09:00 AM', temp: 'Alta', type: 'Normal' } },
-    { id: 'S02', branchId: 'ALEMANIA', status: 'en_uso', enabled: true, usageCount: 120, revenue: 2400, lastCycle: { time: '12:00 PM', temp: 'Media', type: 'Normal' } },
+    { id: 'S01', branchId: 'SANTOS DUMONT', status: 'deshabilitado', enabled: false, usageCount: 95, revenue: 1900, lastCycle: { time: '35 min', temp: 'Alta', type: 'Normal' } },
+    { id: 'S02', branchId: 'ALEMANIA', status: 'en_uso', enabled: true, usageCount: 120, revenue: 2400, lastCycle: { time: '50 min', temp: 'Media', type: 'Normal' } },
 ];
 
 export const DryerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
