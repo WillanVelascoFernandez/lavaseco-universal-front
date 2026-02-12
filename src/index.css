@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Open Sans", sans-serif;
+  }
+
+  body {
+    @apply bg-gray-50 text-brand-dark min-h-screen;
+  }
+}
+
+.bg-brand-blue {
+  background-color: #06476D;
+}
+
+.text-brand-blue {
+  color: #06476D;
+}
+
+.bg-brand-accent {
+  background-color: #1EA0DC;
+}
+
+.text-brand-accent {
+  color: #1EA0DC;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
