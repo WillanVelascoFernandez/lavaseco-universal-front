@@ -1,7 +1,7 @@
 import { useBranches } from '../../models/BranchContext';
 
 export const useSucursalesController = () => {
-    const { branches, loading } = useBranches();
+    const { branches, loading, updateBranchPrices } = useBranches();
 
     const stats = {
         totalBranches: branches.length,
@@ -12,6 +12,7 @@ export const useSucursalesController = () => {
     return {
         branches,
         loading,
-        stats
+        stats,
+        updateBranchPrices
     };
 };

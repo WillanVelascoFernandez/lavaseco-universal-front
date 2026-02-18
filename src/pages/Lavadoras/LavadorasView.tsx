@@ -73,17 +73,17 @@ export const LavadorasView: React.FC<LavadorasViewProps> = ({ lavadoras, handleT
                         <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-xl border border-gray-100 mb-2">
                             <div>
                                 <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Sucursal</p>
-                                <p className="font-bold text-brand-dark leading-tight">{machine.branchId}</p>
+                                <p className="font-bold text-brand-dark leading-tight capitalize">{machine.branchId.replace('-', ' ')}</p>
                             </div>
                             <div>
-                                <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Total Lavados</p>
+                                <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Lavados</p>
                                 <p className="font-bold text-brand-dark leading-tight">{machine.usageCount}</p>
                             </div>
                         </div>
 
                         <div className={`mt-4 p-3 rounded-xl border transition-all duration-300 ${machine.status === 'en_uso'
-                                ? 'bg-blue-50 border-blue-100'
-                                : 'bg-gray-100/50 border-gray-100 opacity-60'
+                            ? 'bg-blue-50 border-blue-100'
+                            : 'bg-gray-100/50 border-gray-100 opacity-60'
                             }`}>
                             <p className={`text-[10px] uppercase font-black tracking-widest mb-1 ${machine.status === 'en_uso' ? 'text-blue-400' : 'text-gray-400'
                                 }`}>
