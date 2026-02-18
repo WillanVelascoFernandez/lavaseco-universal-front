@@ -4,6 +4,16 @@ export interface CycleData {
     type: string;
 }
 
+export interface HistoryEntry {
+    id: string;
+    date: string;
+    time: string;
+    cycleType: string;
+    duration: string;
+    revenue: number;
+    user: string;
+}
+
 export type MachineStatus = 'en_espera' | 'en_uso' | 'deshabilitado';
 
 export interface BaseMachine {
@@ -14,4 +24,5 @@ export interface BaseMachine {
     usageCount: number;
     revenue: number;
     lastCycle: CycleData;
+    history: HistoryEntry[];
 }
