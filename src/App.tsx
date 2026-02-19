@@ -1,56 +1,56 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom'
-import { BranchProvider } from './models/BranchContext'
-import { WasherProvider } from './models/WasherContext'
-import { DryerProvider } from './models/DryerContext'
-import { UserProvider } from './models/UserContext'
-import { AuthProvider, useAuth } from './models/AuthContext'
+import { BranchesProvider } from './pages/Branches/BranchesContext'
+import { WashersProvider } from './pages/Washers/WashersContext'
+import { DryersProvider } from './pages/Dryers/DryersContext'
+import { UsersProvider } from './pages/Users/UsersContext'
+import { LoginProvider, useLogin } from './pages/Login/LoginContext'
 import DashboardLayout from './views/layouts/DashboardLayout'
 import Home from './pages/Home'
-import Lavadoras from './pages/Lavadoras'
-import Secadoras from './pages/Secadoras'
-import Sucursales from './pages/Sucursales'
-import Reportes from './pages/Reportes'
-import Usuarios from './pages/Usuarios'
+import Washers from './pages/Washers'
+import Dryers from './pages/Dryers'
+import Branches from './pages/Branches'
+import Reports from './pages/Reports'
+import Users from './pages/Users'
 import Roles from './pages/Roles'
-import { RoleProvider } from './models/RoleContext'
+import { RolesProvider } from './pages/Roles/RolesContext'
 import Login from './pages/Login'
 
 const ProtectedRoute = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useLogin();
     return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 const App: React.FC = () => {
     return (
-        <AuthProvider>
-            <BranchProvider>
-                <WasherProvider>
-                    <DryerProvider>
-                        <RoleProvider>
-                            <UserProvider>
+        <LoginProvider>
+            <BranchesProvider>
+                <WashersProvider>
+                    <DryersProvider>
+                        <RolesProvider>
+                            <UsersProvider>
                                 <Router>
                                     <Routes>
                                         <Route path="/login" element={<Login />} />
                                         <Route element={<ProtectedRoute />}>
                                             <Route path="/" element={<DashboardLayout />}>
                                                 <Route index element={<Home />} />
-                                                <Route path="sucursales" element={<Sucursales />} />
-                                                <Route path="lavadoras" element={<Lavadoras />} />
-                                                <Route path="secadoras" element={<Secadoras />} />
-                                                <Route path="reportes" element={<Reportes />} />
-                                                <Route path="usuarios" element={<Usuarios />} />
+                                                <Route path="branches" element={<Branches />} />
+                                                <Route path="washers" element={<Washers />} />
+                                                <Route path="dryers" element={<Dryers />} />
+                                                <Route path="reports" element={<Reports />} />
+                                                <Route path="users" element={<Users />} />
                                                 <Route path="roles" element={<Roles />} />
                                             </Route>
                                         </Route>
                                     </Routes>
                                 </Router>
-                            </UserProvider>
-                        </RoleProvider>
-                    </DryerProvider>
-                </WasherProvider>
-            </BranchProvider>
-        </AuthProvider>
+                            </UsersProvider>
+                        </RolesProvider>
+                    </DryersProvider>
+                </WashersProvider>
+            </BranchesProvider>
+        </LoginProvider>
     )
 }
 

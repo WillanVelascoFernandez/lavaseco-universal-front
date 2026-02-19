@@ -14,7 +14,7 @@ export interface HistoryEntry {
     user: string;
 }
 
-export type MachineStatus = 'en_espera' | 'en_uso' | 'deshabilitado';
+export type MachineStatus = 'idle' | 'in_use' | 'disabled';
 
 export interface BaseMachine {
     id: string;

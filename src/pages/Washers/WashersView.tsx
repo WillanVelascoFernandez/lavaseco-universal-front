@@ -1,0 +1,58 @@
+import React from 'react';
+import { Waves } from 'lucide-react';
+import { Washer } from './WashersContext';
+import { WasherCard } from './components/WasherCard';
+import { WasherHistoryModal } from './components/WasherHistoryModal';
+
+interface WashersViewProps {
+    washers: Washer[];
+    handleToggle: (id: string) => void;
+}
+
+export const WashersView: React.FC<WashersViewProps> = ({ washers, handleToggle }) => {
+    const [selectedMachine, setSelectedMachine] = React.useState<Washer | null>(null);
+    const [isHistoryOpen, setIsHistoryOpen] = React.useState(false);
+
+    const openHistory = (machine: Washer) => {
+        setSelectedMachine(machine);
+        setIsHistoryOpen(true);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-brand-blue text-white rounded-lg">
+                        <Waves size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold text-brand-dark">Gestión de Lavadoras</h2>
+                        <p className="text-sm text-gray-500 italic">Monitorea y controla el estado de las lavadoras en tiempo real.</p>
+                    </div>
+                </div>
+                <div className="flex gap-4">
+                    <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-green-500"></div><span className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Espera</span></div>
+                    <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div><span className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">En uso</span></div>
+                    <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-gray-400"></div><span className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Deshabilitado</span></div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {washers.map(machine => (
+                    <WasherCard
+                        key={machine.id}
+                        machine={machine}
+                        onToggle={handleToggle}
+                        onOpenHistory={openHistory}
+                    />
+                ))}
+            </div>
+
+            <WasherHistoryModal
+                isOpen={isHistoryOpen}
+                onClose={() => setIsHistoryOpen(false)}
+                machine={selectedMachine}
+            />
+        </div>
+    );
+};

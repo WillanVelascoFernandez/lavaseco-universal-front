@@ -1,6 +1,6 @@
-import { useWashers } from '../../models/WasherContext';
-import { useDryers } from '../../models/DryerContext';
-import { useBranches } from '../../models/BranchContext';
+import { useWashers } from '../Washers/WashersContext';
+import { useDryers } from '../Dryers/DryersContext';
+import { useBranches } from '../Branches/BranchesContext';
 
 export const useHomeController = () => {
     const { washers } = useWashers();
@@ -9,9 +9,9 @@ export const useHomeController = () => {
 
     // Stats calculations using separate models
     const stats = {
-        activeWashers: washers.filter(w => w.status !== 'deshabilitado').length,
+        activeWashers: washers.filter(w => w.status !== 'disabled').length,
         totalWashers: washers.length,
-        activeDryers: dryers.filter(d => d.status !== 'deshabilitado').length,
+        activeDryers: dryers.filter(d => d.status !== 'disabled').length,
         totalDryers: dryers.length,
         todayRevenue: washers.reduce((acc, curr) => acc + curr.revenue, 0) +
             dryers.reduce((acc, curr) => acc + curr.revenue, 0),

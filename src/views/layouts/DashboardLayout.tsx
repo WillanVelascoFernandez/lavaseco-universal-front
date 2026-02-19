@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { useAuth } from '@/models/AuthContext';
+import { useLogin } from '@/pages/Login/LoginContext';
 import {
     LayoutDashboard,
     MapPin,
@@ -40,7 +40,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ to, icon: Icon, children }) =
 
 const DashboardLayout: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const { logout, user } = useAuth();
+    const { logout, user } = useLogin();
 
     return (
         <div className="flex min-h-screen bg-gray-100 font-sans">
@@ -65,11 +65,11 @@ const DashboardLayout: React.FC = () => {
 
                 <nav className="flex-1 px-3 space-y-2 mt-4">
                     <SidebarLink to="/" icon={LayoutDashboard}>Home</SidebarLink>
-                    <SidebarLink to="/sucursales" icon={MapPin}>Sucursales</SidebarLink>
-                    <SidebarLink to="/lavadoras" icon={Waves}>Lavadoras</SidebarLink>
-                    <SidebarLink to="/secadoras" icon={Wind}>Secadoras</SidebarLink>
-                    <SidebarLink to="/reportes" icon={BarChart3}>Reportes</SidebarLink>
-                    <SidebarLink to="/usuarios" icon={Users}>Usuarios</SidebarLink>
+                    <SidebarLink to="/branches" icon={MapPin}>Sucursales</SidebarLink>
+                    <SidebarLink to="/washers" icon={Waves}>Lavadoras</SidebarLink>
+                    <SidebarLink to="/dryers" icon={Wind}>Secadoras</SidebarLink>
+                    <SidebarLink to="/reports" icon={BarChart3}>Reportes</SidebarLink>
+                    <SidebarLink to="/users" icon={Users}>Usuarios</SidebarLink>
                     <SidebarLink to="/roles" icon={Shield}>Roles</SidebarLink>
                 </nav>
 

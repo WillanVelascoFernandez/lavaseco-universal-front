@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, Plus } from 'lucide-react';
 import { Button } from '@/views/components/Button';
-import { useRoles } from '../../models/RoleContext';
+import { useRoles } from './RolesContext';
 import { Role } from '../../types/role';
 import { RoleCard } from './components/RoleCard';
 import { RoleModal } from './components/RoleModal';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '@/models/AuthContext';
+import { useLogin } from './LoginContext';
 import { useNavigate } from 'react-router-dom';
 
 export const useLoginController = () => {
@@ -8,7 +8,7 @@ export const useLoginController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { login } = useAuth();
+    const { login } = useLogin();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
