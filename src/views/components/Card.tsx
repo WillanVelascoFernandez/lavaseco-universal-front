@@ -19,7 +19,7 @@ export const Card: React.FC<CardProps> = ({ children, className = '', title, sub
                     {subtitle && <p className="text-xs text-gray-400 font-medium italic mt-1">{subtitle}</p>}
                 </div>
             )}
-            <div className={noPadding ? '' : 'p-6'}>
+            <div className={`${noPadding ? '' : 'p-6'} flex-1`}>
                 {children}
             </div>
             {footer && (

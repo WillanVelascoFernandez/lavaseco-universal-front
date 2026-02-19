@@ -12,6 +12,8 @@ import Secadoras from './pages/Secadoras'
 import Sucursales from './pages/Sucursales'
 import Reportes from './pages/Reportes'
 import Usuarios from './pages/Usuarios'
+import Roles from './pages/Roles'
+import { RoleProvider } from './models/RoleContext'
 import Login from './pages/Login'
 
 const ProtectedRoute = () => {
@@ -25,23 +27,26 @@ const App: React.FC = () => {
             <BranchProvider>
                 <WasherProvider>
                     <DryerProvider>
-                        <UserProvider>
-                            <Router>
-                                <Routes>
-                                    <Route path="/login" element={<Login />} />
-                                    <Route element={<ProtectedRoute />}>
-                                        <Route path="/" element={<DashboardLayout />}>
-                                            <Route index element={<Home />} />
-                                            <Route path="sucursales" element={<Sucursales />} />
-                                            <Route path="lavadoras" element={<Lavadoras />} />
-                                            <Route path="secadoras" element={<Secadoras />} />
-                                            <Route path="reportes" element={<Reportes />} />
-                                            <Route path="usuarios" element={<Usuarios />} />
+                        <RoleProvider>
+                            <UserProvider>
+                                <Router>
+                                    <Routes>
+                                        <Route path="/login" element={<Login />} />
+                                        <Route element={<ProtectedRoute />}>
+                                            <Route path="/" element={<DashboardLayout />}>
+                                                <Route index element={<Home />} />
+                                                <Route path="sucursales" element={<Sucursales />} />
+                                                <Route path="lavadoras" element={<Lavadoras />} />
+                                                <Route path="secadoras" element={<Secadoras />} />
+                                                <Route path="reportes" element={<Reportes />} />
+                                                <Route path="usuarios" element={<Usuarios />} />
+                                                <Route path="roles" element={<Roles />} />
+                                            </Route>
                                         </Route>
-                                    </Route>
-                                </Routes>
-                            </Router>
-                        </UserProvider>
+                                    </Routes>
+                                </Router>
+                            </UserProvider>
+                        </RoleProvider>
                     </DryerProvider>
                 </WasherProvider>
             </BranchProvider>

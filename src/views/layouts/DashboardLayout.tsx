@@ -12,6 +12,7 @@ import {
     Menu,
     X,
     Bell,
+    Shield,
     LucideIcon
 } from 'lucide-react';
 
@@ -69,6 +70,7 @@ const DashboardLayout: React.FC = () => {
                     <SidebarLink to="/secadoras" icon={Wind}>Secadoras</SidebarLink>
                     <SidebarLink to="/reportes" icon={BarChart3}>Reportes</SidebarLink>
                     <SidebarLink to="/usuarios" icon={Users}>Usuarios</SidebarLink>
+                    <SidebarLink to="/roles" icon={Shield}>Roles</SidebarLink>
                 </nav>
 
                 <div className="p-4 mt-auto border-t border-brand-blue-dark">
