@@ -1,8 +1,11 @@
 import React from 'react';
 import { RolesView } from './RolesView';
+import { useRolesController } from './RolesController';
 
 const Roles: React.FC = () => {
-    return <RolesView />;
+    const controller = useRolesController();
+    return <RolesView {...controller} />;
 };
 
 export default Roles;
+

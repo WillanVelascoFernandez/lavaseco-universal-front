@@ -1,13 +1,19 @@
 import React from 'react';
 import { Shield, Plus } from 'lucide-react';
 import { Button } from '@/views/components/Button';
-import { useRoles } from './RolesContext';
 import { Role } from '../../types/role';
 import { RoleCard } from './components/RoleCard';
 import { RoleModal } from './components/RoleModal';
 
-export const RolesView: React.FC = () => {
-    const { roles, addRole, updateRole, deleteRole } = useRoles();
+interface RolesViewProps {
+    roles: Role[];
+    loading: boolean;
+    addRole: (role: any) => Promise<void>;
+    updateRole: (id: number, role: any) => Promise<void>;
+    deleteRole: (id: number) => Promise<void>;
+}
+
+export const RolesView: React.FC<RolesViewProps> = ({ roles, addRole, updateRole, deleteRole }) => {
     const [selectedRole, setSelectedRole] = React.useState<Role | null>(null);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
 

@@ -1,30 +1,7 @@
-import { useState, useEffect } from 'react';
-import { reportService } from './ReportService';
+import { useReports } from './ReportsContext';
 
 export const useReportsController = () => {
-    const [loading, setLoading] = useState(true);
-    const [dashboardData, setDashboardData] = useState<any>(null);
-    const [branchData, setBranchData] = useState<any[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const [dash, branches] = await Promise.all([
-                    reportService.getDashboardStats(),
-                    reportService.getBranchReports()
-                ]);
-                setDashboardData(dash);
-                setBranchData(branches);
-            } catch (error) {
-                console.error('Error fetching reports:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
+    const { loading, dashboardData, branchData } = useReports();
 
     // Adapt real data to view's expectations or provide real data
     const revenueData = branchData.map(b => ({

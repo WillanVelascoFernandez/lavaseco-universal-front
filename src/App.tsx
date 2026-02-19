@@ -14,6 +14,8 @@ import Reports from './pages/Reports'
 import Users from './pages/Users'
 import Roles from './pages/Roles'
 import { RolesProvider } from './pages/Roles/RolesContext'
+import { ReportsProvider } from './pages/Reports/ReportsContext'
+import { HomeProvider } from './pages/Home/HomeContext'
 import Login from './pages/Login'
 
 const ProtectedRoute = () => {
@@ -28,24 +30,28 @@ const App: React.FC = () => {
                 <WashersProvider>
                     <DryersProvider>
                         <RolesProvider>
-                            <UsersProvider>
-                                <Router>
-                                    <Routes>
-                                        <Route path="/login" element={<Login />} />
-                                        <Route element={<ProtectedRoute />}>
-                                            <Route path="/" element={<DashboardLayout />}>
-                                                <Route index element={<Home />} />
-                                                <Route path="branches" element={<Branches />} />
-                                                <Route path="washers" element={<Washers />} />
-                                                <Route path="dryers" element={<Dryers />} />
-                                                <Route path="reports" element={<Reports />} />
-                                                <Route path="users" element={<Users />} />
-                                                <Route path="roles" element={<Roles />} />
-                                            </Route>
-                                        </Route>
-                                    </Routes>
-                                </Router>
-                            </UsersProvider>
+                            <ReportsProvider>
+                                <HomeProvider>
+                                    <UsersProvider>
+                                        <Router>
+                                            <Routes>
+                                                <Route path="/login" element={<Login />} />
+                                                <Route element={<ProtectedRoute />}>
+                                                    <Route path="/" element={<DashboardLayout />}>
+                                                        <Route index element={<Home />} />
+                                                        <Route path="branches" element={<Branches />} />
+                                                        <Route path="washers" element={<Washers />} />
+                                                        <Route path="dryers" element={<Dryers />} />
+                                                        <Route path="reports" element={<Reports />} />
+                                                        <Route path="users" element={<Users />} />
+                                                        <Route path="roles" element={<Roles />} />
+                                                    </Route>
+                                                </Route>
+                                            </Routes>
+                                        </Router>
+                                    </UsersProvider>
+                                </HomeProvider>
+                            </ReportsProvider>
                         </RolesProvider>
                     </DryersProvider>
                 </WashersProvider>
