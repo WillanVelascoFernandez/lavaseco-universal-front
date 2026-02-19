@@ -1,4 +1,5 @@
 import { apiFetch } from '../../services/api';
+import { Branch } from '../../types/branch';
 
 export const branchService = {
     getBranches: async () => {

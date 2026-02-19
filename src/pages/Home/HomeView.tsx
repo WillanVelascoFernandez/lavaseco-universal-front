@@ -1,6 +1,7 @@
 import React from 'react';
 import { Waves, Wind, CreditCard, Building2 } from 'lucide-react';
 import { Card } from '@/views/components/Card';
+import { Branch } from '../../types/branch';
 import { Select } from '../../views/components/FormElements';
 import { StatCard } from './components/StatCard';
 import { UsageChart } from './components/UsageChart';
@@ -25,6 +26,7 @@ interface HomeViewProps {
         todayRevenue: number;
     };
     branches: { value: string; label: string }[];
+    rawBranches: Branch[];
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ stats, branches }) => {

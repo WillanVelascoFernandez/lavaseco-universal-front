@@ -1,14 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { userService } from './UserService';
 
-export interface User {
-    id: number;
-    name: string;
-    role: any;
-    email: string;
-    lastActive: string;
-    status: 'active' | 'inactive';
-}
+import { User } from '../../types/user';
 
 interface UsersContextType {
     users: User[];

@@ -1,6 +1,6 @@
 import { Mail, Clock, Edit2, Trash2 } from 'lucide-react';
 import { Badge } from '@/views/components/Badge';
-import { User } from '../UsersContext';
+import { User } from '../../../types/user';
 
 interface UserTableProps {
     users: User[];

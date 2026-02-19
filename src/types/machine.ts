@@ -26,3 +26,6 @@ export interface BaseMachine {
     lastCycle: CycleData;
     history: HistoryEntry[];
 }
+
+export type Washer = BaseMachine;
+export type Dryer = BaseMachine;

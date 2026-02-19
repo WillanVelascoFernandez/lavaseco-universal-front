@@ -1,6 +1,7 @@
 import React from 'react';
 import { Building2 } from 'lucide-react';
-import { Branch } from './BranchesContext';
+import { Branch } from '../../types/branch';
+import { useBranches } from './BranchesContext';
 import { BranchCard } from './components/BranchCard';
 import { BranchModal } from './components/BranchModal';
 

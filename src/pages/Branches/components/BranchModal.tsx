@@ -2,7 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { Building2, Waves, Wind, X } from 'lucide-react';
 import { Button } from '@/views/components/Button';
-import { Branch } from '../BranchesContext';
+import { Branch } from '../../../types/branch';
 
 interface BranchModalProps {
     isOpen: boolean;

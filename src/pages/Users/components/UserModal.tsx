@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { User2, X, Save, Mail, Shield, Activity } from 'lucide-react';
 import { Button } from '@/views/components/Button';
 import { Select } from '@/views/components/FormElements';
-import { User } from '../UsersContext';
+import { User } from '../../../types/user';
 
 interface UserModalProps {
     isOpen: boolean;

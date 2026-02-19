@@ -2,7 +2,7 @@ import React from 'react';
 import { MapPin, TrendingUp, Settings2 } from 'lucide-react';
 import { Card } from '@/views/components/Card';
 import { Badge } from '@/views/components/Badge';
-import { Branch } from '../BranchesContext';
+import { Branch } from '../../../types/branch';
 
 interface BranchCardProps {
     branch: Branch;

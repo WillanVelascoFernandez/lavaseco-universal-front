@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { BaseMachine } from '../../types/machine';
+import { Dryer } from '../../types/machine';
 import { dryerService } from './DryerService';
-
-export type Dryer = BaseMachine;
 
 interface DryersContextType {
     dryers: Dryer[];

@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { BaseMachine } from '../../types/machine';
+import { Washer } from '../../types/machine';
 import { washerService } from './WasherService';
-
-export type Washer = BaseMachine;
 
 interface WashersContextType {
     washers: Washer[];
