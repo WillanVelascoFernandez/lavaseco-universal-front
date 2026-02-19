@@ -17,7 +17,7 @@ export const BranchCard: React.FC<BranchCardProps> = ({ branch, onOpenSettings }
                     <MapPin className="text-brand-blue" size={20} />
                 </div>
                 <div>
-                    <h4 className="font-bold text-brand-dark text-lg">{branch.name}</h4>
+                    <h4 className="font-black text-brand-dark text-lg uppercase">{branch.name}</h4>
                     <p className="text-xs text-gray-400 font-medium">{branch.address}</p>
                 </div>
             </div>

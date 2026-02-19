@@ -19,7 +19,7 @@ export const UserStats: React.FC<UserStatsProps> = ({ stats }) => (
                 </div>
                 <div>
                     <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Registrados</p>
-                    <h3 className="text-2xl font-bold text-brand-dark">{stats.totalUsers}</h3>
+                    <h3 className="text-xl font-bold text-brand-dark">{stats.totalUsers}</h3>
                 </div>
             </div>
         </Card>
@@ -30,7 +30,7 @@ export const UserStats: React.FC<UserStatsProps> = ({ stats }) => (
                 </div>
                 <div>
                     <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Activos Ahora</p>
-                    <h3 className="text-2xl font-bold text-brand-dark">{stats.activeUsers}</h3>
+                    <h3 className="text-xl font-bold text-brand-dark">{stats.activeUsers}</h3>
                 </div>
             </div>
         </Card>
@@ -41,7 +41,7 @@ export const UserStats: React.FC<UserStatsProps> = ({ stats }) => (
                 </div>
                 <div>
                     <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Administradores</p>
-                    <h3 className="text-2xl font-bold text-brand-dark">{stats.admins}</h3>
+                    <h3 className="text-xl font-bold text-brand-dark">{stats.admins}</h3>
                 </div>
             </div>
         </Card>

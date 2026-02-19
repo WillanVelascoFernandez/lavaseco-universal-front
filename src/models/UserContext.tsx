@@ -12,6 +12,9 @@ export interface User {
 interface UserContextType {
     users: User[];
     loading: boolean;
+    addUser: (user: Omit<User, 'id' | 'lastActive'>) => void;
+    updateUser: (id: string, user: Partial<User>) => void;
+    deleteUser: (id: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -24,11 +27,28 @@ const initialUsers: User[] = [
 ];
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [users] = useState<User[]>(initialUsers);
+    const [users, setUsers] = useState<User[]>(initialUsers);
     const [loading] = useState(false);
 
+    const addUser = (userData: Omit<User, 'id' | 'lastActive'>) => {
+        const newUser: User = {
+            ...userData,
+            id: Math.random().toString(36).substr(2, 9),
+            lastActive: 'Nunca'
+        };
+        setUsers([...users, newUser]);
+    };
+
+    const updateUser = (id: string, userData: Partial<User>) => {
+        setUsers(users.map(u => u.id === id ? { ...u, ...userData } : u));
+    };
+
+    const deleteUser = (id: string) => {
+        setUsers(users.filter(u => u.id !== id));
+    };
+
     return (
-        <UserContext.Provider value={{ users, loading }}>
+        <UserContext.Provider value={{ users, loading, addUser, updateUser, deleteUser }}>
             {children}
         </UserContext.Provider>
     );
