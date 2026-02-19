@@ -1,13 +1,14 @@
-import React from 'react';
-import { Mail, Clock } from 'lucide-react';
+import { Mail, Clock, Edit2, Trash2 } from 'lucide-react';
 import { Badge } from '@/views/components/Badge';
 import { User } from '../UsersContext';
 
 interface UserTableProps {
     users: User[];
+    onEdit: (user: User) => void;
+    onDelete: (id: number) => void;
 }
 
-export const UserTable: React.FC<UserTableProps> = ({ users }) => (
+export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => (
     <div className="overflow-x-auto -mx-6">
         <table className="w-full text-left border-collapse">
             <thead>
@@ -16,6 +17,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users }) => (
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Rol</th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Estado</th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Última Actividad</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,6 +51,24 @@ export const UserTable: React.FC<UserTableProps> = ({ users }) => (
                             <div className="flex items-center gap-1.5 font-medium">
                                 <Clock size={14} className="text-gray-400" />
                                 {user.lastActive}
+                            </div>
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-50 text-center">
+                            <div className="flex items-center justify-center gap-2">
+                                <button
+                                    onClick={() => onEdit(user)}
+                                    className="p-2 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+                                    title="Editar"
+                                >
+                                    <Edit2 size={16} />
+                                </button>
+                                <button
+                                    onClick={() => onDelete(user.id)}
+                                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                    title="Eliminar"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
                             </div>
                         </td>
                     </tr>

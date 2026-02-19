@@ -1,5 +1,5 @@
 import React from 'react';
-import { Waves, Wind, CreditCard } from 'lucide-react';
+import { Waves, Wind, CreditCard, Building2 } from 'lucide-react';
 import { Card } from '@/views/components/Card';
 import { Select } from '../../views/components/FormElements';
 import { StatCard } from './components/StatCard';
@@ -55,16 +55,20 @@ export const HomeView: React.FC<HomeViewProps> = ({ stats, branches }) => {
                     trend={5}
                 />
 
-                <Card noPadding overflowVisible className="shadow-none border-dashed border-2 flex flex-col justify-center px-6">
-                    <Select
-                        label="¿Qué estás viendo?"
-                        value={selectedBranch}
-                        onChange={setSelectedBranch}
-                        options={[
-                            { value: 'all', label: 'Todas las sucursales' },
-                            ...branches
-                        ]}
-                    />
+                <Card noPadding overflowVisible className="shadow-none border-dashed border-2 flex flex-col">
+                    <div className="flex-1 flex flex-col justify-center px-6 py-5">
+                        <Select
+                            label="¿Qué estás viendo?"
+                            variant="simple"
+                            showCheck={false}
+                            value={selectedBranch}
+                            onChange={setSelectedBranch}
+                            options={[
+                                { value: 'all', label: 'Todas las sucursales' },
+                                ...branches
+                            ]}
+                        />
+                    </div>
                 </Card>
             </div>
 

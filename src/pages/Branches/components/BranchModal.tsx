@@ -39,7 +39,7 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <div>
                         <h3 className="text-xl font-bold text-brand-dark">Gestión de Sucursal</h3>
-                        <p className="text-xs text-gray-500">{branch.name}</p>
+                        <p className="text-sm text-gray-500 font-semibold">{branch.name}</p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors">
                         <X size={20} className="text-gray-400" />
@@ -57,14 +57,14 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
                                             <Waves size={14} className="text-brand-blue" />
                                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Lavadoras</p>
                                         </div>
-                                        <div className="text-2xl font-black leading-none">{branch.washerCount}</div>
+                                        <div className="text-xl font-bold text-brand-dark leading-none">{branch.washerCount}</div>
                                     </div>
                                     <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
                                         <div className="flex items-center gap-2 mb-1">
                                             <Wind size={14} className="text-brand-accent" />
                                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Secadoras</p>
                                         </div>
-                                        <div className="text-2xl font-black leading-none">{branch.dryerCount}</div>
+                                        <div className="text-xl font-bold text-brand-dark leading-none">{branch.dryerCount}</div>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
                                                 type="number"
                                                 value={wPrice}
                                                 onChange={(e) => setWPrice(Number(e.target.value))}
-                                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border-2 border-transparent focus:border-brand-blue focus:bg-white rounded-2xl font-black text-2xl transition-all outline-none"
+                                                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-transparent focus:border-brand-blue focus:bg-white rounded-2xl font-bold text-xl transition-all outline-none"
                                             />
                                         </div>
                                     </div>
@@ -112,7 +112,7 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
                                                 type="number"
                                                 value={dPrice}
                                                 onChange={(e) => setDPrice(Number(e.target.value))}
-                                                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border-2 border-transparent focus:border-brand-accent focus:bg-white rounded-2xl font-black text-2xl transition-all outline-none"
+                                                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-transparent focus:border-brand-accent focus:bg-white rounded-2xl font-bold text-xl transition-all outline-none"
                                             />
                                         </div>
                                     </div>

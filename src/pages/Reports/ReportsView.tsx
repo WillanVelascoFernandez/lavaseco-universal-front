@@ -52,7 +52,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ revenueData, distribut
                 <Card noPadding className="p-6">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Promedio Mensual</p>
                     <div className="flex items-baseline gap-2">
-                        <h3 className="text-2xl font-bold text-brand-dark">Bs. {summary.avgMonthly.toLocaleString()}</h3>
+                        <h3 className="text-xl font-bold text-brand-dark">Bs. {summary.avgMonthly.toLocaleString()}</h3>
                         <span className="text-xs font-bold text-green-500">+{summary.growth}%</span>
                     </div>
                 </Card>
@@ -60,14 +60,14 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ revenueData, distribut
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Mes con Mayor Ingreso</p>
                     <div className="flex items-center gap-2">
                         <Calendar size={18} className="text-brand-blue" />
-                        <h3 className="text-2xl font-bold text-brand-dark">{summary.bestMonth}</h3>
+                        <h3 className="text-xl font-bold text-brand-dark">{summary.bestMonth}</h3>
                     </div>
                 </Card>
                 <Card noPadding className="p-6 text-white bg-brand-blue">
                     <p className="text-[10px] font-black text-blue-200 uppercase tracking-widest mb-1">Proyección Siguiente Mes</p>
                     <div className="flex items-center gap-2">
                         <TrendingUp size={22} className="text-brand-cyan" />
-                        <h3 className="text-2xl font-bold">Bs. 23,400</h3>
+                        <h3 className="text-xl font-bold">Bs. 23,400</h3>
                     </div>
                 </Card>
             </div>

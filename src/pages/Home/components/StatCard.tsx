@@ -17,7 +17,7 @@ export const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, co
                 <div className="flex items-center gap-2 mb-1">
                     <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">{title}</p>
                 </div>
-                <h3 className="text-3xl font-bold text-brand-dark tracking-tight">{value}</h3>
+                <h3 className="text-xl font-bold text-brand-dark tracking-tight">{value}</h3>
                 {trend && (
                     <p className={`text-xs font-bold mt-2 flex items-center gap-1 ${trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
                         <TrendingUp size={12} className={trend < 0 ? 'rotate-180' : ''} />
@@ -26,7 +26,7 @@ export const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, co
                 )}
             </div>
             <div className={`p-4 rounded-xl ${color.replace('bg-', 'bg-')}/10 border ${color.replace('bg-', 'border-')}/20 flex items-center justify-center`}>
-                <Icon className={color.replace('bg-', 'text-')} size={32} />
+                <Icon className={color.replace('bg-', 'text-')} size={24} />
             </div>
         </div>
     </Card>

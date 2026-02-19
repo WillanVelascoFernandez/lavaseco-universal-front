@@ -14,6 +14,9 @@ interface UsersContextType {
     users: User[];
     loading: boolean;
     refreshUsers: () => Promise<void>;
+    addUser: (userData: any) => Promise<void>;
+    updateUser: (id: number, userData: any) => Promise<void>;
+    deleteUser: (id: number) => Promise<void>;
 }
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined);
@@ -31,7 +34,7 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 name: u.name || 'Sin nombre',
                 role: u.role?.name || 'Invitado',
                 email: u.email,
-                lastActive: 'Recientemente', // Backend doesn't track this yet
+                lastActive: 'Recientemente',
                 status: u.active ? 'active' : 'inactive'
             }));
             setUsers(adaptedUsers);
@@ -46,8 +49,23 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         fetchUsers();
     }, []);
 
+    const addUser = async (userData: any) => {
+        await userService.createUser(userData);
+        await fetchUsers();
+    };
+
+    const updateUser = async (id: number, userData: any) => {
+        await userService.updateUser(id, userData);
+        await fetchUsers();
+    };
+
+    const deleteUser = async (id: number) => {
+        await userService.deleteUser(id);
+        await fetchUsers();
+    };
+
     return (
-        <UsersContext.Provider value={{ users, loading, refreshUsers: fetchUsers }}>
+        <UsersContext.Provider value={{ users, loading, refreshUsers: fetchUsers, addUser, updateUser, deleteUser }}>
             {children}
         </UsersContext.Provider>
     );
