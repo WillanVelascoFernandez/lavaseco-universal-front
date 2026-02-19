@@ -14,7 +14,7 @@ export const dryerService = {
     
     toggleDryer: async (id: number) => {
         return await apiFetch(`/dryers/${id}/toggle`, {
-            method: 'PATCH',
+            method: 'POST',
         });
     },
 

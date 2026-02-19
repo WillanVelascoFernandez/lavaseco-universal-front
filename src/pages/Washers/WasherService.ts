@@ -14,7 +14,7 @@ export const washerService = {
     
     toggleWasher: async (id: number) => {
         return await apiFetch(`/washers/${id}/toggle`, {
-            method: 'PATCH',
+            method: 'POST',
         });
     },
 
