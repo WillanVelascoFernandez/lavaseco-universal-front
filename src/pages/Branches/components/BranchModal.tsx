@@ -16,11 +16,24 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
     const [dPrice, setDPrice] = React.useState(0);
     const [showConfirm, setShowConfirm] = React.useState(false);
 
+    const lastLoadedBranchId = React.useRef<string | null>(null);
+
     React.useEffect(() => {
-        if (isOpen && branch) {
-            setWPrice(branch.washerPrice || 0);
-            setDPrice(branch.dryerPrice || 0);
-            setShowConfirm(false);
+        if (!isOpen) {
+            lastLoadedBranchId.current = null;
+            return;
+        }
+
+        if (branch) {
+            const currentId = branch.id.toString();
+            
+            // Solo cargar si el modal se abre por primera vez o si cambiamos de sucursal
+            if (lastLoadedBranchId.current !== currentId) {
+                setWPrice(branch.washerPrice || 0);
+                setDPrice(branch.dryerPrice || 0);
+                setShowConfirm(false);
+                lastLoadedBranchId.current = currentId;
+            }
         }
     }, [isOpen, branch]);
 

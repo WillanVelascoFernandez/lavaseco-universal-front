@@ -25,12 +25,21 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
     const [selectedBranches, setSelectedBranches] = React.useState<number[]>([]);
     const [password, setPassword] = React.useState('');
 
+    const lastLoadedUserId = React.useRef<number | null | 'new'>(null);
+
     React.useEffect(() => {
-        if (isOpen) {
+        if (!isOpen) {
+            lastLoadedUserId.current = null;
+            return;
+        }
+
+        const currentId = user ? user.id : 'new';
+        
+        // Solo cargar si el modal se acaba de abrir o si el ID del usuario cambió positivamente
+        if (lastLoadedUserId.current !== currentId) {
             if (user) {
                 setName(user.name);
                 setEmail(user.email);
-                // Find role ID from name or use ID if available
                 const currentRole = roles.find(r => r.name === user.role);
                 setRoleId(currentRole?.id || 0);
                 setStatus(user.status);
@@ -44,6 +53,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
                 setSelectedBranches([]);
                 setPassword('');
             }
+            lastLoadedUserId.current = currentId;
         }
     }, [isOpen, user, roles]);
 

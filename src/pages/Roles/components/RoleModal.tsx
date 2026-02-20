@@ -15,16 +15,28 @@ export const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, selectedR
     const [newRoleName, setNewRoleName] = React.useState('');
     const [editedPermissions, setEditedPermissions] = React.useState<Record<string, boolean>>({});
 
+    const lastLoadedRoleId = React.useRef<number | null | 'new'>(null);
+
     React.useEffect(() => {
-        if (isOpen) {
+        if (!isOpen) {
+            lastLoadedRoleId.current = null;
+            return;
+        }
+
+        const currentId = selectedRole ? selectedRole.id : 'new';
+
+        // Solo cargar si el modal se abre por primera vez o si cambiamos de rol
+        if (lastLoadedRoleId.current !== currentId) {
             if (selectedRole) {
                 setEditedPermissions(selectedRole.permissions);
+                setNewRoleName(selectedRole.name);
             } else {
                 setNewRoleName('');
                 const defaultPermissions: Record<string, boolean> = {};
                 AVAILABLE_PERMISSIONS.forEach(p => defaultPermissions[p.id] = false);
                 setEditedPermissions(defaultPermissions);
             }
+            lastLoadedRoleId.current = currentId;
         }
     }, [isOpen, selectedRole]);
 
