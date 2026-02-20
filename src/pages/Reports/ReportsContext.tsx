@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { reportService } from './ReportService';
+import { useLogin } from '../Login/LoginContext';
 
 interface ReportsContextType {
     loading: boolean;
@@ -11,11 +12,15 @@ interface ReportsContextType {
 const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
 
 export const ReportsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [dashboardData, setDashboardData] = useState<any>(null);
     const [branchData, setBranchData] = useState<any[]>([]);
+    const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchReports = async () => {
+    const fetchReports = useCallback(async () => {
+        // Only fetch if has reports_view permission
+        if (!hasPermission('reports_view')) return;
+
         setLoading(true);
         try {
             const [dash, branches] = await Promise.all([
@@ -29,11 +34,17 @@ export const ReportsProvider: React.FC<{ children: ReactNode }> = ({ children })
         } finally {
             setLoading(false);
         }
-    };
+    }, [hasPermission]);
 
     useEffect(() => {
-        fetchReports();
-    }, []);
+        if (isAuthenticated && hasPermission('reports_view')) {
+            fetchReports();
+        } else {
+            setDashboardData(null);
+            setBranchData([]);
+            setLoading(false);
+        }
+    }, [isAuthenticated, hasPermission, fetchReports]);
 
     return (
         <ReportsContext.Provider value={{ loading, dashboardData, branchData, refreshReports: fetchReports }}>

@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { useReports } from './ReportsContext';
 
 export const useReportsController = () => {
-    const { loading, dashboardData, branchData } = useReports();
+    const { loading, dashboardData, branchData, refreshReports } = useReports();
+
+    useEffect(() => {
+        refreshReports();
+    }, [refreshReports]);
 
     // Adapt real data to view's expectations or provide real data
     const revenueData = branchData.map(b => ({

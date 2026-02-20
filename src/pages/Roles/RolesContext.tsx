@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Role } from '../../types/role';
 import { roleService } from './RoleService';
+import { useLogin } from '../Login/LoginContext';
 
 interface RolesContextType {
     roles: Role[];
@@ -16,9 +17,12 @@ const RolesContext = createContext<RolesContextType | undefined>(undefined);
 
 export const RolesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [roles, setRoles] = useState<Role[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchRoles = async () => {
+    const fetchRoles = useCallback(async () => {
+        if (!hasPermission('roles_view')) return;
+
         setLoading(true);
         try {
             const data = await roleService.getRoles();
@@ -28,11 +32,16 @@ export const RolesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         } finally {
             setLoading(false);
         }
-    };
+    }, [hasPermission]);
 
     useEffect(() => {
-        fetchRoles();
-    }, []);
+        if (isAuthenticated && hasPermission('roles_view')) {
+            fetchRoles();
+        } else {
+            setRoles([]);
+            setLoading(false);
+        }
+    }, [isAuthenticated, hasPermission, fetchRoles]);
 
     const addRole = async (roleData: Omit<Role, 'id' | 'createdAt' | 'updatedAt' | 'isProtected'>) => {
         try {

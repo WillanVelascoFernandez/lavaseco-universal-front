@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { userService } from './UserService';
-
+import { useLogin } from '../Login/LoginContext';
 import { User } from '../../types/user';
 
 interface UsersContextType {
@@ -16,9 +16,12 @@ const UsersContext = createContext<UsersContextType | undefined>(undefined);
 
 export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
+        if (!hasPermission('users_view')) return;
+        
         setLoading(true);
         try {
             const data = await userService.getUsers();
@@ -36,11 +39,16 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         } finally {
             setLoading(false);
         }
-    };
+    }, [hasPermission]);
 
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        if (isAuthenticated && hasPermission('users_view')) {
+            fetchUsers();
+        } else {
+            setUsers([]);
+            setLoading(false);
+        }
+    }, [isAuthenticated, hasPermission, fetchUsers]);
 
     const addUser = async (userData: any) => {
         await userService.createUser(userData);

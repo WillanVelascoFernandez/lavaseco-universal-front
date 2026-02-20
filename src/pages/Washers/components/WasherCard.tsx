@@ -53,7 +53,7 @@ export const WasherCard: React.FC<WasherCardProps> = ({ machine, onToggle, onOpe
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
                     <Waves size={20} className="text-brand-blue" />
-                    <span className="font-black text-xl text-brand-dark">{machine.id}</span>
+                    <span className="font-black text-xl text-brand-dark">{machine.name}</span>
                 </div>
                 <Badge variant={getStatusVariant(machine.status)}>
                     {machine.status.replace('_', ' ')}

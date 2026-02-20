@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { useBranches } from './BranchesContext';
 
 export const useBranchesController = () => {
-    const { branches, loading, updateBranchPrices } = useBranches();
+    const { branches, loading, updateBranchPrices, refreshBranches } = useBranches();
+
+    useEffect(() => {
+        refreshBranches();
+    }, [refreshBranches]);
 
     const stats = {
         totalBranches: branches.length,

@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Washer } from '../../types/machine';
 import { washerService } from './WasherService';
+import { useLogin } from '../Login/LoginContext';
 
 interface WashersContextType {
     washers: Washer[];
@@ -12,41 +13,56 @@ interface WashersContextType {
 
 const WashersContext = createContext<WashersContextType | undefined>(undefined);
 
+const POLLING_INTERVAL = 5000; // 5 seconds
+
 export const WashersProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [washers, setWashers] = useState<Washer[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const { isAuthenticated } = useLogin();
 
-    const fetchWashers = async () => {
-        setLoading(true);
+    const fetchWashers = useCallback(async (showLoading = true) => {
+        if (showLoading) setLoading(true);
         try {
             const data = await washerService.getWashers();
-            // Adapt backend data to frontend model
             const adaptedWashers = data.map((w: any) => ({
                 id: w.id.toString(),
+                name: w.name,
                 branchId: w.branchId.toString(),
                 status: w.isEnabled ? 'idle' : 'disabled',
                 enabled: w.isEnabled,
                 usageCount: w._count?.logs || 0,
-                revenue: (w._count?.logs || 0) * 15, // Mocking revenue based on count
+                revenue: (w._count?.logs || 0) * 15,
                 lastCycle: { time: '--:--', temp: '0°C', type: 'Ninguno' },
-                history: [] // We could fetch logs separately
+                history: []
             }));
             setWashers(adaptedWashers);
         } catch (error) {
             console.error('Error fetching washers:', error);
         } finally {
+            if (showLoading) setLoading(false);
+        }
+    }, []);
+
+    // Initial fetch and polling
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchWashers();
+            
+            const interval = setInterval(() => {
+                fetchWashers(false); // Background update without showing loading spinner
+            }, POLLING_INTERVAL);
+            
+            return () => clearInterval(interval);
+        } else {
+            setWashers([]);
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
-        fetchWashers();
-    }, []);
+    }, [isAuthenticated, fetchWashers]);
 
     const toggleWasherStatus = async (washerId: string) => {
         try {
             await washerService.toggleWasher(parseInt(washerId));
-            await fetchWashers(); // Refresh list after toggle
+            await fetchWashers();
         } catch (error) {
             console.error('Error toggling washer:', error);
         }

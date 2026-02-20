@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { branchService } from './BranchService';
-
+import { useLogin } from '../Login/LoginContext';
 import { Branch } from '../../types/branch';
 
 interface BranchesContextType {
@@ -14,21 +14,23 @@ const BranchesContext = createContext<BranchesContextType | undefined>(undefined
 
 export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [branches, setBranches] = useState<Branch[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchBranches = async () => {
+    const fetchBranches = useCallback(async () => {
+        if (!hasPermission('branches_view')) return;
+
         setLoading(true);
         try {
             const data = await branchService.getBranches();
-            // Adapt backend data to frontend model if necessary
             const adaptedBranches = data.map((b: any) => ({
                 ...b,
                 revenue: b.revenue || 0,
                 userCount: b._count?.users || 0,
                 washerCount: b._count?.washers || 0,
                 dryerCount: b._count?.dryers || 0,
-                washerPrice: 15, // Default for now
-                dryerPrice: 15  // Default for now
+                washerPrice: 15,
+                dryerPrice: 15
             }));
             setBranches(adaptedBranches);
         } catch (error) {
@@ -36,11 +38,16 @@ export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }
         } finally {
             setLoading(false);
         }
-    };
+    }, [hasPermission]);
 
     useEffect(() => {
-        fetchBranches();
-    }, []);
+        if (isAuthenticated && hasPermission('branches_view')) {
+            fetchBranches();
+        } else {
+            setBranches([]);
+            setLoading(false);
+        }
+    }, [isAuthenticated, hasPermission, fetchBranches]);
 
     const updateBranchPrices = (branchId: string, washerPrice: number, dryerPrice: number, applyToAll: boolean) => {
         setBranches(prev => prev.map(b => {

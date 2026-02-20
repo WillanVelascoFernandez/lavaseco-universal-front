@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Dryer } from '../../types/machine';
 import { dryerService } from './DryerService';
+import { useLogin } from '../Login/LoginContext';
 
 interface DryersContextType {
     dryers: Dryer[];
@@ -12,41 +13,56 @@ interface DryersContextType {
 
 const DryersContext = createContext<DryersContextType | undefined>(undefined);
 
+const POLLING_INTERVAL = 5000; // 5 seconds
+
 export const DryersProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [dryers, setDryers] = useState<Dryer[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const { isAuthenticated } = useLogin();
 
-    const fetchDryers = async () => {
-        setLoading(true);
+    const fetchDryers = useCallback(async (showLoading = true) => {
+        if (showLoading) setLoading(true);
         try {
             const data = await dryerService.getDryers();
-            // Adapt backend data to frontend model
             const adaptedDryers = data.map((d: any) => ({
                 id: d.id.toString(),
+                name: d.name,
                 branchId: d.branchId.toString(),
                 status: d.isEnabled ? 'idle' : 'disabled',
                 enabled: d.isEnabled,
                 usageCount: d._count?.logs || 0,
-                revenue: (d._count?.logs || 0) * 15, // Mocking revenue based on count
+                revenue: (d._count?.logs || 0) * 15,
                 lastCycle: { time: '--:--', temp: 'Media', type: 'Ninguno' },
-                history: [] // We could fetch logs separately
+                history: []
             }));
             setDryers(adaptedDryers);
         } catch (error) {
             console.error('Error fetching dryers:', error);
         } finally {
+            if (showLoading) setLoading(false);
+        }
+    }, []);
+
+    // Initial fetch and polling
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchDryers();
+            
+            const interval = setInterval(() => {
+                fetchDryers(false); // Background update
+            }, POLLING_INTERVAL);
+            
+            return () => clearInterval(interval);
+        } else {
+            setDryers([]);
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
-        fetchDryers();
-    }, []);
+    }, [isAuthenticated, fetchDryers]);
 
     const toggleDryerStatus = async (dryerId: string) => {
         try {
             await dryerService.toggleDryer(parseInt(dryerId));
-            await fetchDryers(); // Refresh list after toggle
+            await fetchDryers();
         } catch (error) {
             console.error('Error toggling dryer:', error);
         }

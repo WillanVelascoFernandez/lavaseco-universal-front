@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
 import { useHome } from './HomeContext';
 import { useBranches } from '../Branches/BranchesContext';
 
 export const useHomeController = () => {
-    const { stats: apiStats, loading } = useHome();
-    const { branches } = useBranches();
+    const { stats: apiStats, loading, refreshStats } = useHome();
+    const { branches, refreshBranches } = useBranches();
+
+    useEffect(() => {
+        refreshStats();
+        refreshBranches();
+    }, [refreshStats, refreshBranches]);
 
     // Adapt API stats or fallback to calculated ones
     const stats = apiStats ? {

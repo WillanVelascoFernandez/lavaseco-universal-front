@@ -53,7 +53,7 @@ export const DryerCard: React.FC<DryerCardProps> = ({ machine, onToggle, onOpenH
             <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
                     <Wind size={20} className="text-brand-accent" />
-                    <span className="font-black text-xl text-brand-dark">{machine.id}</span>
+                    <span className="font-black text-xl text-brand-dark">{machine.name}</span>
                 </div>
                 <Badge variant={getStatusVariant(machine.status)}>
                     {machine.status.replace('_', ' ')}

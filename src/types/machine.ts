@@ -18,6 +18,7 @@ export type MachineStatus = 'idle' | 'in_use' | 'disabled';
 
 export interface BaseMachine {
     id: string;
+    name: string;
     branchId: string;
     status: MachineStatus;
     enabled: boolean;

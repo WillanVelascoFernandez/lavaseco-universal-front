@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { useUsers } from './UsersContext';
 
 export const useUsersController = () => {
-    const { users, loading } = useUsers();
+    const { users, loading, refreshUsers } = useUsers();
+
+    useEffect(() => {
+        refreshUsers();
+    }, [refreshUsers]);
 
     const stats = {
         totalUsers: users.length,
