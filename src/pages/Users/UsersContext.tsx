@@ -3,6 +3,9 @@ import { userService } from './UserService';
 import { useLogin } from '../Login/LoginContext';
 import { User } from '../../types/user';
 
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
+
 interface UsersContextType {
     users: User[];
     loading: boolean;
@@ -32,7 +35,9 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 name: u.name || 'Sin nombre',
                 role: u.role?.name || 'Invitado',
                 email: u.email,
-                lastActive: 'Recientemente',
+                lastActive: u.lastActive 
+                    ? formatDistanceToNow(new Date(u.lastActive), { addSuffix: true, locale: es })
+                    : 'Sin actividad',
                 status: u.active ? 'active' : 'inactive',
                 branches: u.branches || [],
                 isProtected: u.role?.isProtected || false
