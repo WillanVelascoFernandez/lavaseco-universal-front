@@ -48,7 +48,8 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
             } else {
                 setName('');
                 setEmail('');
-                setRoleId(roles[0]?.id || 0);
+                const firstAvailableRole = roles.find(r => !r.isProtected) || roles[0];
+                setRoleId(firstAvailableRole?.id || 0);
                 setStatus('active');
                 setSelectedBranches([]);
                 setPassword('');
@@ -179,7 +180,12 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
                                 value={roleId.toString()}
                                 onChange={(val) => setRoleId(parseInt(val))}
                                 options={roles
-                                    .filter(r => !r.isProtected || r.id === roleId)
+                                    .filter(r => {
+                                        // If creating new user, strictly hide protected roles
+                                        if (!user) return !r.isProtected;
+                                        // If editing, show protected roles only if it's the current role of the user
+                                        return !r.isProtected || r.id === roleId;
+                                    })
                                     .map(r => ({ value: r.id.toString(), label: r.name }))
                                 }
                                 disabled={isUserProtected}
