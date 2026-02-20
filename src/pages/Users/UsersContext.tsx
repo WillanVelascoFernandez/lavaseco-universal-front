@@ -39,7 +39,7 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                     ? formatDistanceToNow(new Date(u.lastActive), { addSuffix: true, locale: es })
                     : 'Sin actividad',
                 lastActiveRaw: u.lastActive || null,
-                status: u.active ? 'active' : 'inactive',
+                status: u.isEnabled ? 'active' : 'inactive',
                 branches: u.branches || [],
                 isProtected: u.role?.isProtected || false
             }));

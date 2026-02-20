@@ -34,9 +34,9 @@ export const LoginProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             setIsAuthenticated(true);
             setUser(data.user);
             return true;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Login failed:', error);
-            return false;
+            throw error; // Rethrow to handle in controller
         }
     };
 

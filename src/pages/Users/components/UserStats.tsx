@@ -20,8 +20,8 @@ const getFilterIcon = (filterId: string) => {
 
 const getFilterLabel = (filterId: string) => {
     if (filterId === 'all') return 'Todos';
-    if (filterId === 'online') return 'En línea';
-    if (filterId === 'blocked') return 'Bloqueados';
+    if (filterId === 'online') return 'Actividad';
+    if (filterId === 'blocked') return 'Sin Acceso';
     if (filterId.startsWith('branch:')) return filterId.replace('branch:', '');
     if (filterId.startsWith('role:')) return filterId.replace('role:', '');
     return filterId;

@@ -77,7 +77,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
 
         if (!isUserProtected) {
             userData.roleId = roleId;
-            userData.active = status === 'active';
+            userData.isEnabled = status === 'active';
             userData.branchIds = selectedBranches;
         }
 

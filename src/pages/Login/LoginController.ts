@@ -17,14 +17,10 @@ export const useLoginController = () => {
         setError('');
 
         try {
-            const success = await login(email, password);
-            if (success) {
-                navigate('/');
-            } else {
-                setError('Credenciales inválidas');
-            }
-        } catch (err) {
-            setError('Error al iniciar sesión');
+            await login(email, password);
+            navigate('/');
+        } catch (err: any) {
+            setError(err.message || 'Error al iniciar sesión');
         } finally {
             setLoading(false);
         }

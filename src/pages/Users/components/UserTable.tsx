@@ -129,8 +129,10 @@ export const UserTable: React.FC<UserTableProps> = ({ users, sortConfig, onSort,
                             </td>
                             <td className="px-6 py-4 border-b border-gray-50">
                                 <div className="flex items-center gap-2">
-                                    <div className={`w-2 h-2 rounded-full ${user.status === 'active' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-gray-300'}`}></div>
-                                    <span className="text-sm font-medium text-gray-600 capitalize">{user.status}</span>
+                                    <div className={`w-2 h-2 rounded-full ${user.status === 'active' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'bg-red-400'}`}></div>
+                                    <span className="text-[11px] font-black uppercase tracking-wider text-gray-500">
+                                        {user.status === 'active' ? 'Acceso Permitido' : 'Acceso Restringido'}
+                                    </span>
                                 </div>
                             </td>
                             <td className="px-6 py-4 border-b border-gray-50 text-sm text-gray-500">
