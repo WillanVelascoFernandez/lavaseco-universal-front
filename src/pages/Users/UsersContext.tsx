@@ -34,7 +34,8 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 email: u.email,
                 lastActive: 'Recientemente',
                 status: u.active ? 'active' : 'inactive',
-                branches: u.branches || []
+                branches: u.branches || [],
+                isProtected: u.role?.isProtected || false
             }));
             setUsers(adaptedUsers);
         } catch (error) {

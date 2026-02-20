@@ -6,4 +6,5 @@ export interface User {
     lastActive: string;
     status: 'active' | 'inactive';
     branches: any[];
+    isProtected?: boolean;
 }

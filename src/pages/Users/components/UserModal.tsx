@@ -57,23 +57,36 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
         }
     }, [isOpen, user, roles]);
 
+    const isUserProtected = React.useMemo(() => {
+        if (!user) return false;
+        const userRole = roles.find(r => r.name === user.role);
+        return userRole?.isProtected || false;
+    }, [user, roles]);
+
     if (!isOpen) return null;
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // If protected, we only allow changing name, email and password
         const userData: any = { 
             name, 
-            email, 
-            roleId, 
-            active: status === 'active',
-            branchIds: selectedBranches 
+            email
         };
+
+        if (!isUserProtected) {
+            userData.roleId = roleId;
+            userData.active = status === 'active';
+            userData.branchIds = selectedBranches;
+        }
+
         if (password) userData.password = password;
         
         onSave(userData);
     };
 
     const toggleBranch = (branchId: number) => {
+        if (isUserProtected) return; // Prevent toggling for protected users
         setSelectedBranches(prev => 
             prev.includes(branchId) 
                 ? prev.filter(id => id !== branchId)
@@ -102,6 +115,18 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-6">
+                    {isUserProtected && (
+                        <div className="bg-orange-50 border border-orange-100 p-4 rounded-2xl flex items-start gap-3">
+                            <Shield className="text-orange-500 shrink-0" size={20} />
+                            <div>
+                                <p className="text-xs font-bold text-orange-800 uppercase tracking-wider mb-1">Usuario de Sistema</p>
+                                <p className="text-xs text-orange-700 font-medium leading-relaxed">
+                                    Este usuario tiene privilegios de Super Administrador. El rol, estado y acceso a sucursales están bloqueados para garantizar la integridad del sistema.
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -153,7 +178,11 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
                                 icon={Shield}
                                 value={roleId.toString()}
                                 onChange={(val) => setRoleId(parseInt(val))}
-                                options={roles.map(r => ({ value: r.id.toString(), label: r.name }))}
+                                options={roles
+                                    .filter(r => !r.isProtected || r.id === roleId)
+                                    .map(r => ({ value: r.id.toString(), label: r.name }))
+                                }
+                                disabled={isUserProtected}
                             />
                             <Select
                                 label="Estado de Cuenta"
@@ -164,6 +193,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
                                     { value: 'active', label: 'Activo' },
                                     { value: 'inactive', label: 'Inactivo' }
                                 ]}
+                                disabled={isUserProtected}
                             />
                         </div>
 
@@ -172,7 +202,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user, onS
                                 <Building2 size={14} className="text-brand-blue" />
                                 Sucursales Asignadas
                             </label>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-[2rem] border border-gray-100">
+                            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 bg-gray-50 p-4 rounded-[2rem] border border-gray-100 ${isUserProtected ? 'opacity-70 pointer-events-none' : ''}`}>
                                 {branches.map(branch => (
                                     <div 
                                         key={branch.id}

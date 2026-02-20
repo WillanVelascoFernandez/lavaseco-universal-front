@@ -111,9 +111,14 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete })
                                         )}
                                         {onDelete && (
                                             <button
-                                                onClick={() => onDelete(user.id)}
-                                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                                                title="Eliminar"
+                                                onClick={() => !user.isProtected && onDelete(user.id)}
+                                                disabled={user.isProtected}
+                                                className={`p-2 rounded-lg transition-all ${
+                                                    user.isProtected 
+                                                        ? 'text-gray-200 cursor-not-allowed' 
+                                                        : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                                                }`}
+                                                title={user.isProtected ? "No se puede eliminar un usuario administrador del sistema" : "Eliminar"}
                                             >
                                                 <Trash2 size={16} />
                                             </button>

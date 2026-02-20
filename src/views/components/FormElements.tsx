@@ -32,6 +32,7 @@ interface SelectProps {
     icon?: React.ElementType;
     showCheck?: boolean;
     variant?: 'premium' | 'simple';
+    disabled?: boolean;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -44,7 +45,8 @@ export const Select: React.FC<SelectProps> = ({
     className = '',
     icon: Icon,
     showCheck = true,
-    variant = 'premium'
+    variant = 'premium',
+    disabled = false
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -73,8 +75,10 @@ export const Select: React.FC<SelectProps> = ({
 
             <button
                 type="button"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => !disabled && setIsOpen(!isOpen)}
+                disabled={disabled}
                 className={`flex items-center justify-between w-full outline-none transition-all shadow-sm text-left relative
+                    ${disabled ? 'opacity-60 cursor-not-allowed grayscale-[0.5]' : ''}
                     ${isPremium
                         ? `bg-gray-50 border-2 ${error ? 'border-red-500' : 'border-transparent'} ${isOpen ? 'border-brand-blue bg-white' : 'hover:border-brand-blue/30'} rounded-2xl p-4`
                         : `bg-white border ${error ? 'border-red-500' : 'border-gray-200'} ${isOpen ? 'border-brand-blue ring-2 ring-brand-blue/5' : 'hover:border-brand-blue/30'} rounded-xl p-3 px-4`

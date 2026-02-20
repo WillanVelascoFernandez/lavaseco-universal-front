@@ -117,7 +117,7 @@ const DashboardLayout: React.FC = () => {
                         <div className="flex items-center gap-3 pl-6 border-l border-gray-200">
                             <div className="text-right">
                                 <p className="text-sm font-semibold text-brand-dark">{user?.name || 'Invitado'}</p>
-                                <p className="text-xs text-brand-accent">{user?.role || 'Administrador'}</p>
+                                <p className="text-xs text-brand-accent">{user?.role?.name || user?.role || 'Administrador'}</p>
                             </div>
                             <div className="w-10 h-10 rounded-full bg-brand-blue flex items-center justify-center text-white overflow-hidden shadow-inner font-bold uppercase">
                                 {user?.name?.substring(0, 2) || 'AD'}
