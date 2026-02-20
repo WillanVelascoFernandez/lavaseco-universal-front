@@ -4,6 +4,7 @@ import { Card } from '@/views/components/Card';
 import { Button } from '@/views/components/Button';
 import { User } from '../../types/user';
 import { useUsers } from './UsersContext';
+import { useLogin } from '../Login/LoginContext';
 import { UserStats } from './components/UserStats';
 import { UserTable } from './components/UserTable';
 import { UserModal } from './components/UserModal';
@@ -18,6 +19,7 @@ interface UsersViewProps {
 
 export const UsersView: React.FC<UsersViewProps> = ({ stats }) => {
     const { users, addUser, updateUser, deleteUser } = useUsers();
+    const { hasPermission } = useLogin();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -59,10 +61,12 @@ export const UsersView: React.FC<UsersViewProps> = ({ stats }) => {
                         <p className="text-sm text-gray-500 italic">Administración de cuentas, permisos y niveles de acceso del personal.</p>
                     </div>
                 </div>
-                <Button onClick={handleAddClick} className="gap-2 px-6 rounded-2xl shadow-xl shadow-brand-blue/10">
-                    <UserPlus size={20} />
-                    Agregar Usuario
-                </Button>
+                {hasPermission('users_create') && (
+                    <Button onClick={handleAddClick} className="gap-2 px-6 rounded-2xl shadow-xl shadow-brand-blue/10">
+                        <UserPlus size={20} />
+                        Agregar Usuario
+                    </Button>
+                )}
             </div>
 
             <UserStats stats={stats} />
@@ -70,8 +74,8 @@ export const UsersView: React.FC<UsersViewProps> = ({ stats }) => {
             <Card overflowVisible className="border-none shadow-xl shadow-gray-200/50 rounded-[2rem]">
                 <UserTable
                     users={users}
-                    onEdit={handleEditClick}
-                    onDelete={handleDeleteUser}
+                    onEdit={hasPermission('users_edit') ? handleEditClick : undefined}
+                    onDelete={hasPermission('users_delete') ? handleDeleteUser : undefined}
                 />
             </Card>
 

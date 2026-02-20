@@ -4,8 +4,8 @@ import { User } from '../../../types/user';
 
 interface UserTableProps {
     users: User[];
-    onEdit: (user: User) => void;
-    onDelete: (id: number) => void;
+    onEdit?: (user: User) => void;
+    onDelete?: (id: number) => void;
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => (
@@ -17,7 +17,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete })
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Rol</th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Estado</th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Última Actividad</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 text-center">Acciones</th>
+                    {(onEdit || onDelete) && <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 text-center">Acciones</th>}
                 </tr>
             </thead>
             <tbody>
@@ -53,24 +53,30 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete })
                                 {user.lastActive}
                             </div>
                         </td>
-                        <td className="px-6 py-4 border-b border-gray-50 text-center">
-                            <div className="flex items-center justify-center gap-2">
-                                <button
-                                    onClick={() => onEdit(user)}
-                                    className="p-2 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
-                                    title="Editar"
-                                >
-                                    <Edit2 size={16} />
-                                </button>
-                                <button
-                                    onClick={() => onDelete(user.id)}
-                                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                                    title="Eliminar"
-                                >
-                                    <Trash2 size={16} />
-                                </button>
-                            </div>
-                        </td>
+                        {(onEdit || onDelete) && (
+                            <td className="px-6 py-4 border-b border-gray-50 text-center">
+                                <div className="flex items-center justify-center gap-2">
+                                    {onEdit && (
+                                        <button
+                                            onClick={() => onEdit(user)}
+                                            className="p-2 text-gray-400 hover:text-brand-blue hover:bg-brand-blue/10 rounded-lg transition-all"
+                                            title="Editar"
+                                        >
+                                            <Edit2 size={16} />
+                                        </button>
+                                    )}
+                                    {onDelete && (
+                                        <button
+                                            onClick={() => onDelete(user.id)}
+                                            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                            title="Eliminar"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    )}
+                                </div>
+                            </td>
+                        )}
                     </tr>
                 ))}
             </tbody>

@@ -6,6 +6,7 @@ import { Select } from '../../views/components/FormElements';
 import { StatCard } from './components/StatCard';
 import { UsageChart } from './components/UsageChart';
 import { RevenueChart } from './components/RevenueChart';
+import { useLogin } from '../Login/LoginContext';
 
 const chartData = [
     { name: 'Lun', usage: 45, revenue: 1200 },
@@ -30,6 +31,7 @@ interface HomeViewProps {
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ stats, branches }) => {
+    const { hasPermission } = useLogin();
     const [selectedBranch, setSelectedBranch] = React.useState('all');
 
     return (
@@ -49,13 +51,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ stats, branches }) => {
                     color="bg-brand-accent"
                     trend={12}
                 />
-                <StatCard
-                    title="Recaudación Hoy"
-                    value={`Bs.${stats.todayRevenue.toLocaleString()}`}
-                    icon={CreditCard}
-                    color="bg-green-600"
-                    trend={5}
-                />
+                {hasPermission('reports_view') && (
+                    <StatCard
+                        title="Recaudación Hoy"
+                        value={`Bs.${stats.todayRevenue.toLocaleString()}`}
+                        icon={CreditCard}
+                        color="bg-green-600"
+                        trend={5}
+                    />
+                )}
 
                 <Card noPadding overflowVisible className="shadow-none border-dashed border-2 flex flex-col">
                     <div className="flex-1 flex flex-col justify-center px-6 py-5">
@@ -76,7 +80,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ stats, branches }) => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <UsageChart data={chartData} />
-                <RevenueChart data={chartData} />
+                {hasPermission('reports_view') && <RevenueChart data={chartData} />}
             </div>
         </div>
     );

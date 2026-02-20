@@ -40,7 +40,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ to, icon: Icon, children }) =
 
 const DashboardLayout: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const { logout, user } = useLogin();
+    const { logout, user, hasPermission } = useLogin();
 
     return (
         <div className="flex min-h-screen bg-gray-100 font-sans">
@@ -65,12 +65,24 @@ const DashboardLayout: React.FC = () => {
 
                 <nav className="flex-1 px-3 space-y-2 mt-4">
                     <SidebarLink to="/" icon={LayoutDashboard}>Home</SidebarLink>
-                    <SidebarLink to="/branches" icon={MapPin}>Sucursales</SidebarLink>
-                    <SidebarLink to="/washers" icon={Waves}>Lavadoras</SidebarLink>
-                    <SidebarLink to="/dryers" icon={Wind}>Secadoras</SidebarLink>
-                    <SidebarLink to="/reports" icon={BarChart3}>Reportes</SidebarLink>
-                    <SidebarLink to="/users" icon={Users}>Usuarios</SidebarLink>
-                    <SidebarLink to="/roles" icon={Shield}>Roles</SidebarLink>
+                    {hasPermission('branches_view') && (
+                        <SidebarLink to="/branches" icon={MapPin}>Sucursales</SidebarLink>
+                    )}
+                    {hasPermission('washers_view') && (
+                        <SidebarLink to="/washers" icon={Waves}>Lavadoras</SidebarLink>
+                    )}
+                    {hasPermission('dryers_view') && (
+                        <SidebarLink to="/dryers" icon={Wind}>Secadoras</SidebarLink>
+                    )}
+                    {hasPermission('reports_view') && (
+                        <SidebarLink to="/reports" icon={BarChart3}>Reportes</SidebarLink>
+                    )}
+                    {hasPermission('users_view') && (
+                        <SidebarLink to="/users" icon={Users}>Usuarios</SidebarLink>
+                    )}
+                    {hasPermission('roles_view') && (
+                        <SidebarLink to="/roles" icon={Shield}>Roles</SidebarLink>
+                    )}
                 </nav>
 
                 <div className="p-4 mt-auto border-t border-brand-blue-dark">

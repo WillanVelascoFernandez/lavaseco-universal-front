@@ -6,7 +6,7 @@ import { Branch } from '../../../types/branch';
 
 interface BranchCardProps {
     branch: Branch;
-    onOpenSettings: (branch: Branch) => void;
+    onOpenSettings?: (branch: Branch) => void;
 }
 
 export const BranchCard: React.FC<BranchCardProps> = ({ branch, onOpenSettings }) => (
@@ -22,13 +22,15 @@ export const BranchCard: React.FC<BranchCardProps> = ({ branch, onOpenSettings }
                 </div>
             </div>
             <div className="flex gap-2 items-center">
-                <button
-                    onClick={() => onOpenSettings(branch)}
-                    className="h-8 w-8 bg-white border border-gray-200 text-gray-400 rounded-lg hover:border-brand-blue hover:text-brand-blue transition-all flex items-center justify-center group"
-                    title="Gestionar Sucursal"
-                >
-                    <Settings2 size={14} className="group-hover:rotate-45 transition-transform duration-300" />
-                </button>
+                {onOpenSettings && (
+                    <button
+                        onClick={() => onOpenSettings(branch)}
+                        className="h-8 w-8 bg-white border border-gray-200 text-gray-400 rounded-lg hover:border-brand-blue hover:text-brand-blue transition-all flex items-center justify-center group"
+                        title="Gestionar Sucursal"
+                    >
+                        <Settings2 size={14} className="group-hover:rotate-45 transition-transform duration-300" />
+                    </button>
+                )}
                 <Badge variant="success">Operativo</Badge>
             </div>
         </div>

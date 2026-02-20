@@ -7,8 +7,8 @@ import { Role } from '../../../types/role';
 
 interface RoleCardProps {
     role: Role;
-    onEdit: (role: Role) => void;
-    onDelete: (id: number) => void;
+    onEdit?: (role: Role) => void;
+    onDelete?: (id: number) => void;
 }
 
 export const RoleCard: React.FC<RoleCardProps> = ({ role, onEdit, onDelete }) => {
@@ -18,16 +18,18 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role, onEdit, onDelete }) =>
             className={`border-t-4 h-[300px] flex flex-col ${role.isProtected ? 'border-t-brand-dark' : 'border-t-blue-500'}`}
             footer={
                 <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 gap-1.5"
-                        onClick={() => onEdit(role)}
-                    >
-                        <Save size={14} />
-                        Configurar Permisos
-                    </Button>
-                    {!role.isProtected && (
+                    {onEdit && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1 gap-1.5"
+                            onClick={() => onEdit(role)}
+                        >
+                            <Save size={14} />
+                            Configurar Permisos
+                        </Button>
+                    )}
+                    {onDelete && !role.isProtected && (
                         <Button
                             variant="danger"
                             size="sm"

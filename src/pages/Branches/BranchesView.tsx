@@ -4,6 +4,7 @@ import { Branch } from '../../types/branch';
 import { useBranches } from './BranchesContext';
 import { BranchCard } from './components/BranchCard';
 import { BranchModal } from './components/BranchModal';
+import { useLogin } from '../Login/LoginContext';
 
 interface BranchesViewProps {
     branches: Branch[];
@@ -17,6 +18,7 @@ interface BranchesViewProps {
 }
 
 export const BranchesView: React.FC<BranchesViewProps> = ({ branches, updateBranchPrices }) => {
+    const { hasPermission } = useLogin();
     const [selectedBranch, setSelectedBranch] = React.useState<Branch | null>(null);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -44,7 +46,7 @@ export const BranchesView: React.FC<BranchesViewProps> = ({ branches, updateBran
                     <BranchCard
                         key={branch.id}
                         branch={branch}
-                        onOpenSettings={openPriceModal}
+                        onOpenSettings={hasPermission('branches_edit') ? openPriceModal : undefined}
                     />
                 ))}
             </div>

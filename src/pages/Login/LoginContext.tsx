@@ -7,6 +7,7 @@ interface LoginContextType {
     login: (email: string, pass: string) => Promise<boolean>;
     logout: () => void;
     loading: boolean;
+    hasPermission: (permission: string) => boolean;
 }
 
 const LoginContext = createContext<LoginContextType | undefined>(undefined);
@@ -45,8 +46,13 @@ export const LoginProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setUser(null);
     };
 
+    const hasPermission = (permission: string): boolean => {
+        if (!user || !user.permissions) return false;
+        return !!user.permissions[permission];
+    };
+
     return (
-        <LoginContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
+        <LoginContext.Provider value={{ isAuthenticated, user, login, logout, loading, hasPermission }}>
             {!loading && children}
         </LoginContext.Provider>
     );

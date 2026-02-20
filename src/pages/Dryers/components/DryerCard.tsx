@@ -3,15 +3,18 @@ import { Wind, History } from 'lucide-react';
 import { Card } from '@/views/components/Card';
 import { Badge } from '@/views/components/Badge';
 import { Button } from '@/views/components/Button';
-import { Dryer } from '../DryersContext';
+import { Dryer } from '../../../types/machine';
+import { useLogin } from '../../Login/LoginContext';
 
 interface DryerCardProps {
     machine: Dryer;
-    onToggle: (id: string) => void;
+    onToggle?: (id: string) => void;
     onOpenHistory: (machine: Dryer) => void;
 }
 
 export const DryerCard: React.FC<DryerCardProps> = ({ machine, onToggle, onOpenHistory }) => {
+    const { hasPermission } = useLogin();
+
     const getStatusVariant = (status: string): any => {
         switch (status) {
             case 'in_use': return 'info';
@@ -26,14 +29,16 @@ export const DryerCard: React.FC<DryerCardProps> = ({ machine, onToggle, onOpenH
             className="group transition-all hover:border-brand-accent/30"
             footer={
                 <div className="flex gap-2">
-                    <Button
-                        variant={machine.enabled ? 'danger' : 'success'}
-                        size="sm"
-                        className="flex-1 gap-2"
-                        onClick={() => onToggle(machine.id)}
-                    >
-                        {machine.enabled ? 'Deshabilitar' : 'Habilitar'}
-                    </Button>
+                    {onToggle && hasPermission('dryers_toggle') && (
+                        <Button
+                            variant={machine.enabled ? 'danger' : 'success'}
+                            size="sm"
+                            className="flex-1 gap-2"
+                            onClick={() => onToggle(machine.id)}
+                        >
+                            {machine.enabled ? 'Deshabilitar' : 'Habilitar'}
+                        </Button>
+                    )}
                     <Button
                         variant="outline"
                         size="sm"

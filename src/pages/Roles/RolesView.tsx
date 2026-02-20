@@ -4,6 +4,7 @@ import { Button } from '@/views/components/Button';
 import { Role } from '../../types/role';
 import { RoleCard } from './components/RoleCard';
 import { RoleModal } from './components/RoleModal';
+import { useLogin } from '../Login/LoginContext';
 
 interface RolesViewProps {
     roles: Role[];
@@ -14,6 +15,7 @@ interface RolesViewProps {
 }
 
 export const RolesView: React.FC<RolesViewProps> = ({ roles, addRole, updateRole, deleteRole }) => {
+    const { hasPermission } = useLogin();
     const [selectedRole, setSelectedRole] = React.useState<Role | null>(null);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -48,10 +50,12 @@ export const RolesView: React.FC<RolesViewProps> = ({ roles, addRole, updateRole
                         <p className="text-sm text-gray-500 italic">Define qué pueden hacer los usuarios en el sistema.</p>
                     </div>
                 </div>
-                <Button onClick={handleOpenCreate} className="gap-2">
-                    <Plus size={18} />
-                    Nuevo Rol
-                </Button>
+                {hasPermission('roles_create') && (
+                    <Button onClick={handleOpenCreate} className="gap-2">
+                        <Plus size={18} />
+                        Nuevo Rol
+                    </Button>
+                )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -59,8 +63,8 @@ export const RolesView: React.FC<RolesViewProps> = ({ roles, addRole, updateRole
                     <RoleCard
                         key={role.id}
                         role={role}
-                        onEdit={handleOpenEdit}
-                        onDelete={deleteRole}
+                        onEdit={hasPermission('roles_edit') ? handleOpenEdit : undefined}
+                        onDelete={hasPermission('roles_delete') ? deleteRole : undefined}
                     />
                 ))}
             </div>
