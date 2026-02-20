@@ -22,5 +22,9 @@ export const washerService = {
         return await apiFetch(`/washers/${id}`, {
             method: 'DELETE',
         });
+    },
+
+    getWasherHistory: async (id: number) => {
+        return await apiFetch(`/washers/${id}/history`);
     }
 };

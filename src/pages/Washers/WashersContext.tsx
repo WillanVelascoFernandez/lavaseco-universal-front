@@ -32,7 +32,7 @@ export const WashersProvider: React.FC<{ children: ReactNode }> = ({ children })
                 status: w.isEnabled ? 'idle' : 'disabled',
                 enabled: w.isEnabled,
                 usageCount: w._count?.logs || 0,
-                revenue: (w._count?.logs || 0) * 15,
+                revenue: (w._count?.logs || 0) * (w.branch?.washerPrice || 0),
                 lastCycle: { time: '--:--', temp: '0°C', type: 'Ninguno' },
                 history: []
             }));

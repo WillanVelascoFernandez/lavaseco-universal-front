@@ -3,7 +3,10 @@ import { createPortal } from 'react-dom';
 import { History, X, Calendar, Clock, User } from 'lucide-react';
 import { Badge } from '@/views/components/Badge';
 import { Button } from '@/views/components/Button';
-import { Washer } from '../WashersContext';
+import { Washer, HistoryEntry } from '../../../types/machine';
+import { washerService } from '../WasherService';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 interface WasherHistoryModalProps {
     isOpen: boolean;
@@ -13,19 +16,46 @@ interface WasherHistoryModalProps {
 
 export const WasherHistoryModal: React.FC<WasherHistoryModalProps> = ({ isOpen, onClose, machine }) => {
     const [currentPage, setCurrentPage] = React.useState(1);
+    const [history, setHistory] = React.useState<HistoryEntry[]>([]);
+    const [loading, setLoading] = React.useState(false);
     const recordsPerPage = 10;
 
+    const fetchHistory = React.useCallback(async () => {
+        if (!machine) return;
+        setLoading(true);
+        try {
+            const data = await washerService.getWasherHistory(parseInt(machine.id));
+            const formattedHistory: HistoryEntry[] = data.map((log: any) => ({
+                id: log.id.toString(),
+                date: format(new Date(log.createdAt), 'dd MMM yyyy', { locale: es }),
+                time: format(new Date(log.createdAt), 'HH:mm'),
+                cycleType: log.washType || 'Normal',
+                duration: '45 min', // Simulated constant for now
+                revenue: machine.revenue / Math.max(machine.usageCount, 1), // Estimated based on total
+                user: 'Automático' // For now, could be passed from backend if added
+            }));
+            setHistory(formattedHistory);
+        } catch (error) {
+            console.error('Error fetching washer history:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, [machine]);
+
     React.useEffect(() => {
-        if (isOpen) setCurrentPage(1);
-    }, [isOpen]);
+        if (isOpen) {
+            setCurrentPage(1);
+            fetchHistory();
+        }
+    }, [isOpen, fetchHistory]);
 
     if (!isOpen || !machine) return null;
 
-    const totalRecords = machine.history?.length || 0;
+    const totalRecords = history.length;
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    const currentRecords = machine.history?.slice(indexOfFirstRecord, indexOfLastRecord) || [];
+    const currentRecords = history.slice(indexOfFirstRecord, indexOfLastRecord);
 
     return createPortal(
         <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-brand-dark/60 backdrop-blur-md animate-in fade-in duration-300">
@@ -68,7 +98,12 @@ export const WasherHistoryModal: React.FC<WasherHistoryModalProps> = ({ isOpen, 
 
                 <div className="p-6 overflow-y-auto custom-scrollbar flex-1 bg-gray-50/30">
                     <div className="space-y-3">
-                        {currentRecords.length > 0 ? (
+                        {loading ? (
+                            <div className="text-center py-12">
+                                <div className="animate-spin w-8 h-8 border-4 border-brand-blue border-t-transparent rounded-full mx-auto mb-4"></div>
+                                <p className="text-sm font-bold text-gray-400 italic">Cargando historial...</p>
+                            </div>
+                        ) : currentRecords.length > 0 ? (
                             currentRecords.map((entry) => (
                                 <div key={entry.id} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all group">
                                     <div className="flex flex-row items-center justify-between gap-6">
@@ -103,7 +138,7 @@ export const WasherHistoryModal: React.FC<WasherHistoryModalProps> = ({ isOpen, 
 
                                         <div className="w-24 text-right">
                                             <p className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1 text-right">Ingreso</p>
-                                            <Badge variant="info" className="text-sm">Bs. {entry.revenue}</Badge>
+                                            <Badge variant="info" className="text-sm border-none bg-blue-50 text-brand-blue">Bs. {entry.revenue.toFixed(2)}</Badge>
                                         </div>
                                     </div>
                                 </div>

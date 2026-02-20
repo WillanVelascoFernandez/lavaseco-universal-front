@@ -22,5 +22,9 @@ export const dryerService = {
         return await apiFetch(`/dryers/${id}`, {
             method: 'DELETE',
         });
+    },
+
+    getDryerHistory: async (id: number) => {
+        return await apiFetch(`/dryers/${id}/history`);
     }
 };

@@ -32,7 +32,7 @@ export const DryersProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 status: d.isEnabled ? 'idle' : 'disabled',
                 enabled: d.isEnabled,
                 usageCount: d._count?.logs || 0,
-                revenue: (d._count?.logs || 0) * 15,
+                revenue: (d._count?.logs || 0) * (d.branch?.dryerPrice || 0),
                 lastCycle: { time: '--:--', temp: 'Media', type: 'Ninguno' },
                 history: []
             }));
