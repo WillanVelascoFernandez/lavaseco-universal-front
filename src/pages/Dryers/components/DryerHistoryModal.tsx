@@ -18,14 +18,15 @@ export const DryerHistoryModal: React.FC<DryerHistoryModalProps> = ({ isOpen, on
     const [currentPage, setCurrentPage] = React.useState(1);
     const [history, setHistory] = React.useState<HistoryEntry[]>([]);
     const [loading, setLoading] = React.useState(false);
+    const [pagination, setPagination] = React.useState({ total: 0, pages: 1 });
     const recordsPerPage = 10;
 
-    const fetchHistory = React.useCallback(async () => {
+    const fetchHistory = React.useCallback(async (page: number) => {
         if (!machine) return;
         setLoading(true);
         try {
-            const data = await dryerService.getDryerHistory(parseInt(machine.id));
-            const formattedHistory: HistoryEntry[] = data.map((log: any) => ({
+            const data = await dryerService.getDryerHistory(parseInt(machine.id), page, recordsPerPage);
+            const formattedHistory: HistoryEntry[] = data.logs.map((log: any) => ({
                 id: log.id.toString(),
                 date: format(new Date(log.createdAt), 'dd MMM yyyy', { locale: es }),
                 time: format(new Date(log.createdAt), 'HH:mm'),
@@ -35,6 +36,7 @@ export const DryerHistoryModal: React.FC<DryerHistoryModalProps> = ({ isOpen, on
                 user: log.user?.name || 'Sistema'
             }));
             setHistory(formattedHistory);
+            setPagination({ total: data.pagination.total, pages: data.pagination.pages });
         } catch (error) {
             console.error('Error fetching dryer history:', error);
         } finally {
@@ -44,18 +46,20 @@ export const DryerHistoryModal: React.FC<DryerHistoryModalProps> = ({ isOpen, on
 
     React.useEffect(() => {
         if (isOpen) {
-            setCurrentPage(1);
-            fetchHistory();
+            fetchHistory(currentPage);
         }
-    }, [isOpen, fetchHistory]);
+    }, [isOpen, currentPage, fetchHistory]);
+
+    // Reset page when machine changes or modal opens
+    React.useEffect(() => {
+        if (isOpen) setCurrentPage(1);
+    }, [isOpen, machine?.id]);
 
     if (!isOpen || !machine) return null;
 
-    const totalRecords = history.length;
-    const totalPages = Math.ceil(totalRecords / recordsPerPage);
-    const indexOfLastRecord = currentPage * recordsPerPage;
-    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    const currentRecords = history.slice(indexOfFirstRecord, indexOfLastRecord);
+    const totalRecords = pagination.total;
+    const totalPages = pagination.pages;
+    const currentRecords = history;
 
     return createPortal(
         <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-brand-dark/60 backdrop-blur-md animate-in fade-in duration-300">

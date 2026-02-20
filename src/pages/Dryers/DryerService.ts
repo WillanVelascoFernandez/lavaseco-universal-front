@@ -24,7 +24,7 @@ export const dryerService = {
         });
     },
 
-    getDryerHistory: async (id: number) => {
-        return await apiFetch(`/dryers/${id}/history`);
+    getDryerHistory: async (id: number, page = 1, limit = 50) => {
+        return await apiFetch(`/dryers/${id}/history?page=${page}&limit=${limit}`);
     }
 };

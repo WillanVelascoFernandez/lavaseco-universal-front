@@ -24,7 +24,7 @@ export const washerService = {
         });
     },
 
-    getWasherHistory: async (id: number) => {
-        return await apiFetch(`/washers/${id}/history`);
+    getWasherHistory: async (id: number, page = 1, limit = 50) => {
+        return await apiFetch(`/washers/${id}/history?page=${page}&limit=${limit}`);
     }
 };
