@@ -5,4 +5,5 @@ export interface User {
     email: string;
     lastActive: string;
     status: 'active' | 'inactive';
+    branches: any[];
 }

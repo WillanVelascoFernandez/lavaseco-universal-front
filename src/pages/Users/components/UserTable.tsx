@@ -1,4 +1,4 @@
-import { Mail, Clock, Edit2, Trash2 } from 'lucide-react';
+import { Mail, Clock, Edit2, Trash2, MapPin } from 'lucide-react';
 import { Badge } from '@/views/components/Badge';
 import { User } from '../../../types/user';
 
@@ -15,6 +15,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete })
                 <tr className="bg-gray-50/50">
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Usuario</th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Rol</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Sucursales</th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Estado</th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Última Actividad</th>
                     {(onEdit || onDelete) && <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 text-center">Acciones</th>}
@@ -37,9 +38,23 @@ export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete })
                             </div>
                         </td>
                         <td className="px-6 py-4 border-b border-gray-50">
-                            <Badge variant={user.role === 'admin' ? 'info' : 'gray'}>
+                            <Badge variant={user.role?.toLowerCase() === 'admin' ? 'info' : 'gray'}>
                                 <span className="capitalize">{user.role}</span>
                             </Badge>
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-50">
+                            <div className="flex flex-wrap gap-1 max-w-[200px]">
+                                {user.branches && user.branches.length > 0 ? (
+                                    user.branches.map(b => (
+                                        <div key={b.id} className="flex items-center gap-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-[10px] font-bold border border-gray-200">
+                                            <MapPin size={8} />
+                                            {b.name}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <span className="text-[10px] text-gray-400 italic">Sin asignar</span>
+                                )}
+                            </div>
                         </td>
                         <td className="px-6 py-4 border-b border-gray-50">
                             <div className="flex items-center gap-2">

@@ -13,9 +13,9 @@ export const useHomeController = () => {
 
     // Adapt API stats or fallback to calculated ones
     const stats = apiStats ? {
-        activeWashers: apiStats.totals.washers, // Assuming API structure
+        activeWashers: apiStats.totals.activeWashers,
         totalWashers: apiStats.totals.washers,
-        activeDryers: apiStats.totals.dryers,
+        activeDryers: apiStats.totals.activeDryers,
         totalDryers: apiStats.totals.dryers,
         todayRevenue: apiStats.last24Hours.washes * 15 + apiStats.last24Hours.dries * 15, // Mock value
     } : {

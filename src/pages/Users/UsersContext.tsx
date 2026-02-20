@@ -31,7 +31,8 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 role: u.role?.name || 'Invitado',
                 email: u.email,
                 lastActive: 'Recientemente',
-                status: u.active ? 'active' : 'inactive'
+                status: u.active ? 'active' : 'inactive',
+                branches: u.branches || []
             }));
             setUsers(adaptedUsers);
         } catch (error) {
