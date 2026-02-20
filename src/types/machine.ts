@@ -20,6 +20,7 @@ export interface BaseMachine {
     id: string;
     name: string;
     branchId: string;
+    branchName: string;
     status: MachineStatus;
     enabled: boolean;
     usageCount: number;

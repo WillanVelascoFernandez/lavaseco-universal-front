@@ -63,7 +63,7 @@ export const WasherCard: React.FC<WasherCardProps> = ({ machine, onToggle, onOpe
             <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-xl border border-gray-100 mb-2 h-24 items-start">
                 <div>
                     <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Sucursal</p>
-                    <p className="font-bold text-brand-dark leading-tight capitalize">{machine.branchId.replace('-', ' ')}</p>
+                    <p className="font-bold text-brand-dark leading-tight capitalize">{machine.branchName}</p>
                 </div>
                 <div>
                     <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Lavados</p>

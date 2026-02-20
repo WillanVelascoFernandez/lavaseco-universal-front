@@ -28,6 +28,7 @@ export const DryersProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 id: d.id.toString(),
                 name: d.name,
                 branchId: d.branchId.toString(),
+                branchName: d.branch?.name || 'Sin sucursal',
                 status: d.isEnabled ? 'idle' : 'disabled',
                 enabled: d.isEnabled,
                 usageCount: d._count?.logs || 0,

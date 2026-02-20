@@ -28,6 +28,7 @@ export const WashersProvider: React.FC<{ children: ReactNode }> = ({ children })
                 id: w.id.toString(),
                 name: w.name,
                 branchId: w.branchId.toString(),
+                branchName: w.branch?.name || 'Sin sucursal',
                 status: w.isEnabled ? 'idle' : 'disabled',
                 enabled: w.isEnabled,
                 usageCount: w._count?.logs || 0,
