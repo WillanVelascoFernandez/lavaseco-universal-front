@@ -7,7 +7,7 @@ interface BranchesContextType {
     branches: Branch[];
     loading: boolean;
     refreshBranches: () => Promise<void>;
-    updateBranchPrices: (branchId: string, washerPrice: number, dryerPrice: number, applyToAll: boolean) => void;
+    updateBranchSettings: (branchId: string, washerPrice: number, dryerPrice: number, washerTime: number, dryerTime: number, applyToAll: boolean) => void;
 }
 
 const BranchesContext = createContext<BranchesContextType | undefined>(undefined);
@@ -32,7 +32,9 @@ export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }
                 washerCount: b._count?.washers || 0,
                 dryerCount: b._count?.dryers || 0,
                 washerPrice: b.washerPrice || 0,
-                dryerPrice: b.dryerPrice || 0
+                dryerPrice: b.dryerPrice || 0,
+                washerTime: b.washerTime || 45,
+                dryerTime: b.dryerTime || 45
             }));
             setBranches(adaptedBranches);
         } catch (error) {
@@ -57,26 +59,26 @@ export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }
         }
     }, [isAuthenticated, hasPermission, fetchBranches]);
 
-    const updateBranchPrices = async (branchId: string, washerPrice: number, dryerPrice: number, applyToAll: boolean) => {
+    const updateBranchSettings = async (branchId: string, washerPrice: number, dryerPrice: number, washerTime: number, dryerTime: number, applyToAll: boolean) => {
         try {
             if (applyToAll) {
                 // Update all branches in the backend
                 await Promise.all(branches.map(b => 
-                    branchService.updateBranch(b.id, { washerPrice, dryerPrice })
+                    branchService.updateBranch(b.id, { washerPrice, dryerPrice, washerTime, dryerTime })
                 ));
             } else {
                 // Update only the specific branch
-                await branchService.updateBranch(parseInt(branchId), { washerPrice, dryerPrice });
+                await branchService.updateBranch(parseInt(branchId), { washerPrice, dryerPrice, washerTime, dryerTime });
             }
             // Refresh the list to get updated data
             await fetchBranches(false);
         } catch (error) {
-            console.error('Error updating branch prices:', error);
+            console.error('Error updating branch settings:', error);
         }
     };
 
     return (
-        <BranchesContext.Provider value={{ branches, loading, refreshBranches: fetchBranches, updateBranchPrices }}>
+        <BranchesContext.Provider value={{ branches, loading, refreshBranches: fetchBranches, updateBranchSettings }}>
             {children}
         </BranchesContext.Provider>
     );

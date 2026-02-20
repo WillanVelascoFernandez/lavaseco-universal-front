@@ -8,12 +8,14 @@ interface BranchModalProps {
     isOpen: boolean;
     onClose: () => void;
     branch: Branch | null;
-    onUpdatePrices: (branchId: string, washerPrice: number, dryerPrice: number, applyToAll: boolean) => void;
+    onUpdateSettings: (branchId: string, washerPrice: number, dryerPrice: number, washerTime: number, dryerTime: number, applyToAll: boolean) => void;
 }
 
-export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branch, onUpdatePrices }) => {
+export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branch, onUpdateSettings }) => {
     const [wPrice, setWPrice] = React.useState(0);
     const [dPrice, setDPrice] = React.useState(0);
+    const [wTime, setWTime] = React.useState(45);
+    const [dTime, setDTime] = React.useState(45);
     const [showConfirm, setShowConfirm] = React.useState(false);
 
     const lastLoadedBranchId = React.useRef<string | null>(null);
@@ -31,6 +33,8 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
             if (lastLoadedBranchId.current !== currentId) {
                 setWPrice(branch.washerPrice || 0);
                 setDPrice(branch.dryerPrice || 0);
+                setWTime(branch.washerTime || 45);
+                setDTime(branch.dryerTime || 45);
                 setShowConfirm(false);
                 lastLoadedBranchId.current = currentId;
             }
@@ -42,7 +46,7 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
     const handleSaveRequest = () => setShowConfirm(true);
 
     const confirmSave = (applyToAll: boolean) => {
-        onUpdatePrices(branch.id.toString(), wPrice, dPrice, applyToAll);
+        onUpdateSettings(branch.id.toString(), wPrice, dPrice, wTime, dTime, applyToAll);
         onClose();
     };
 
@@ -125,6 +129,36 @@ export const BranchModal: React.FC<BranchModalProps> = ({ isOpen, onClose, branc
                                                 type="number"
                                                 value={dPrice}
                                                 onChange={(e) => setDPrice(Number(e.target.value))}
+                                                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-transparent focus:border-brand-accent focus:bg-white rounded-2xl font-bold text-xl transition-all outline-none"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-3">
+                                <p className="text-[10px] font-black text-brand-blue uppercase tracking-widest px-1">Tiempos de Ciclo (Min.)</p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2 px-1">Lavado</label>
+                                        <div className="relative">
+                                            <Waves className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-blue/40" size={20} />
+                                            <input
+                                                type="number"
+                                                value={wTime}
+                                                onChange={(e) => setWTime(Number(e.target.value))}
+                                                className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-transparent focus:border-brand-blue focus:bg-white rounded-2xl font-bold text-xl transition-all outline-none"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2 px-1">Secado</label>
+                                        <div className="relative">
+                                            <Wind className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-accent/40" size={20} />
+                                            <input
+                                                type="number"
+                                                value={dTime}
+                                                onChange={(e) => setDTime(Number(e.target.value))}
                                                 className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-transparent focus:border-brand-accent focus:bg-white rounded-2xl font-bold text-xl transition-all outline-none"
                                             />
                                         </div>

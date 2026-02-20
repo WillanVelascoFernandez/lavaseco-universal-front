@@ -30,9 +30,9 @@ export const WasherHistoryModal: React.FC<WasherHistoryModalProps> = ({ isOpen, 
                 date: format(new Date(log.createdAt), 'dd MMM yyyy', { locale: es }),
                 time: format(new Date(log.createdAt), 'HH:mm'),
                 cycleType: log.washType || 'Normal',
-                duration: '45 min', // Simulated constant for now
-                revenue: machine.revenue / Math.max(machine.usageCount, 1), // Estimated based on total
-                user: 'Automático' // For now, could be passed from backend if added
+                duration: (log.duration || 45) + ' min',
+                revenue: log.revenue || 0,
+                user: log.user?.name || 'Sistema'
             }));
             setHistory(formattedHistory);
         } catch (error) {

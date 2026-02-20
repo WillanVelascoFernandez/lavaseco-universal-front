@@ -30,9 +30,9 @@ export const DryerHistoryModal: React.FC<DryerHistoryModalProps> = ({ isOpen, on
                 date: format(new Date(log.createdAt), 'dd MMM yyyy', { locale: es }),
                 time: format(new Date(log.createdAt), 'HH:mm'),
                 cycleType: log.dryType || 'Normal',
-                duration: '45 min',
-                revenue: machine.revenue / Math.max(machine.usageCount, 1),
-                user: 'Automático'
+                duration: (log.duration || 45) + ' min',
+                revenue: log.revenue || 0,
+                user: log.user?.name || 'Sistema'
             }));
             setHistory(formattedHistory);
         } catch (error) {

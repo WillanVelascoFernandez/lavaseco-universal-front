@@ -14,10 +14,10 @@ interface BranchesViewProps {
         totalRevenue: number;
         totalUsers: number;
     };
-    updateBranchPrices: (branchId: string, washerPrice: number, dryerPrice: number, applyToAll: boolean) => void;
+    updateBranchSettings: (branchId: string, washerPrice: number, dryerPrice: number, washerTime: number, dryerTime: number, applyToAll: boolean) => void;
 }
 
-export const BranchesView: React.FC<BranchesViewProps> = ({ branches, updateBranchPrices }) => {
+export const BranchesView: React.FC<BranchesViewProps> = ({ branches, updateBranchSettings }) => {
     const { hasPermission } = useLogin();
     const [selectedBranch, setSelectedBranch] = React.useState<Branch | null>(null);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -55,7 +55,7 @@ export const BranchesView: React.FC<BranchesViewProps> = ({ branches, updateBran
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 branch={selectedBranch}
-                onUpdatePrices={updateBranchPrices}
+                onUpdateSettings={updateBranchSettings}
             />
         </div>
     );

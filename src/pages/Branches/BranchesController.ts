@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useBranches } from './BranchesContext';
 
 export const useBranchesController = () => {
-    const { branches, loading, updateBranchPrices, refreshBranches } = useBranches();
+    const { branches, loading, updateBranchSettings, refreshBranches } = useBranches();
 
     useEffect(() => {
         refreshBranches();
@@ -18,6 +18,6 @@ export const useBranchesController = () => {
         branches,
         loading,
         stats,
-        updateBranchPrices
+        updateBranchSettings
     };
 };
