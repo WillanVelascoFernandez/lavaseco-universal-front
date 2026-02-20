@@ -12,15 +12,17 @@ interface BranchesContextType {
 
 const BranchesContext = createContext<BranchesContextType | undefined>(undefined);
 
+const POLLING_INTERVAL = 5000; // 5 seconds
+
 export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [branches, setBranches] = useState<Branch[]>([]);
     const [loading, setLoading] = useState(false);
     const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchBranches = useCallback(async () => {
+    const fetchBranches = useCallback(async (showLoading = true) => {
         if (!hasPermission('branches_view')) return;
 
-        setLoading(true);
+        if (showLoading) setLoading(true);
         try {
             const data = await branchService.getBranches();
             const adaptedBranches = data.map((b: any) => ({
@@ -36,13 +38,19 @@ export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }
         } catch (error) {
             console.error('Error fetching branches:', error);
         } finally {
-            setLoading(false);
+            if (showLoading) setLoading(false);
         }
     }, [hasPermission]);
 
     useEffect(() => {
         if (isAuthenticated && hasPermission('branches_view')) {
             fetchBranches();
+            
+            const interval = setInterval(() => {
+                fetchBranches(false); // Background update
+            }, POLLING_INTERVAL);
+            
+            return () => clearInterval(interval);
         } else {
             setBranches([]);
             setLoading(false);

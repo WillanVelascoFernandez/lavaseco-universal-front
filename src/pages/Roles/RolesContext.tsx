@@ -15,28 +15,36 @@ interface RolesContextType {
 
 const RolesContext = createContext<RolesContextType | undefined>(undefined);
 
+const POLLING_INTERVAL = 5000; // 5 seconds
+
 export const RolesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState(false);
     const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchRoles = useCallback(async () => {
+    const fetchRoles = useCallback(async (showLoading = true) => {
         if (!hasPermission('roles_view')) return;
 
-        setLoading(true);
+        if (showLoading) setLoading(true);
         try {
             const data = await roleService.getRoles();
             setRoles(data);
         } catch (error) {
             console.error('Error fetching roles:', error);
         } finally {
-            setLoading(false);
+            if (showLoading) setLoading(false);
         }
     }, [hasPermission]);
 
     useEffect(() => {
         if (isAuthenticated && hasPermission('roles_view')) {
             fetchRoles();
+            
+            const interval = setInterval(() => {
+                fetchRoles(false); // Background update
+            }, POLLING_INTERVAL);
+            
+            return () => clearInterval(interval);
         } else {
             setRoles([]);
             setLoading(false);

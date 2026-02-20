@@ -14,15 +14,17 @@ interface UsersContextType {
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined);
 
+const POLLING_INTERVAL = 5000; // 5 seconds
+
 export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(false);
     const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchUsers = useCallback(async () => {
+    const fetchUsers = useCallback(async (showLoading = true) => {
         if (!hasPermission('users_view')) return;
         
-        setLoading(true);
+        if (showLoading) setLoading(true);
         try {
             const data = await userService.getUsers();
             const adaptedUsers = data.map((u: any) => ({
@@ -38,13 +40,19 @@ export const UsersProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         } catch (error) {
             console.error('Error fetching users:', error);
         } finally {
-            setLoading(false);
+            if (showLoading) setLoading(false);
         }
     }, [hasPermission]);
 
     useEffect(() => {
         if (isAuthenticated && hasPermission('users_view')) {
             fetchUsers();
+            
+            const interval = setInterval(() => {
+                fetchUsers(false); // Background update
+            }, POLLING_INTERVAL);
+            
+            return () => clearInterval(interval);
         } else {
             setUsers([]);
             setLoading(false);

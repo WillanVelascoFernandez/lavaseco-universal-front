@@ -11,17 +11,19 @@ interface ReportsContextType {
 
 const ReportsContext = createContext<ReportsContextType | undefined>(undefined);
 
+const POLLING_INTERVAL = 5000; // 5 seconds
+
 export const ReportsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [dashboardData, setDashboardData] = useState<any>(null);
     const [branchData, setBranchData] = useState<any[]>([]);
     const { isAuthenticated, hasPermission } = useLogin();
 
-    const fetchReports = useCallback(async () => {
+    const fetchReports = useCallback(async (showLoading = true) => {
         // Only fetch if has reports_view permission
         if (!hasPermission('reports_view')) return;
 
-        setLoading(true);
+        if (showLoading) setLoading(true);
         try {
             const [dash, branches] = await Promise.all([
                 reportService.getDashboardStats(),
@@ -32,13 +34,19 @@ export const ReportsProvider: React.FC<{ children: ReactNode }> = ({ children })
         } catch (error) {
             console.error('Error fetching reports:', error);
         } finally {
-            setLoading(false);
+            if (showLoading) setLoading(false);
         }
     }, [hasPermission]);
 
     useEffect(() => {
         if (isAuthenticated && hasPermission('reports_view')) {
             fetchReports();
+            
+            const interval = setInterval(() => {
+                fetchReports(false); // Background update
+            }, POLLING_INTERVAL);
+            
+            return () => clearInterval(interval);
         } else {
             setDashboardData(null);
             setBranchData([]);
