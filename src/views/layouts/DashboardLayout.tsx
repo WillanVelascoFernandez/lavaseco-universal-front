@@ -15,6 +15,7 @@ import {
     Shield,
     LucideIcon
 } from 'lucide-react';
+import { DigitalClock } from '@/views/components/DigitalClock';
 
 interface SidebarLinkProps {
     to: string;
@@ -36,7 +37,6 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ to, icon: Icon, children }) =
         <span className="font-medium">{children}</span>
     </NavLink>
 );
-
 
 const DashboardLayout: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -110,6 +110,10 @@ const DashboardLayout: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-6">
+                        <div className="hidden md:block">
+                            <DigitalClock />
+                        </div>
+                        
                         <button className="relative p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
                             <Bell size={20} />
                             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>

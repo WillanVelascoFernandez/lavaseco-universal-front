@@ -1,13 +1,23 @@
-import { Mail, Clock, Edit2, Trash2, MapPin } from 'lucide-react';
+import { Mail, Clock, Edit2, Trash2, MapPin, ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
 import { User } from '../../../types/user';
 
 interface UserTableProps {
     users: User[];
+    sortConfig: { key: string; direction: 'asc' | 'desc' } | null;
+    onSort: (key: string) => void;
     onEdit?: (user: User) => void;
     onDelete?: (id: number) => void;
 }
 
+const SortIcon = ({ column, currentSort }: { column: string; currentSort: UserTableProps['sortConfig'] }) => {
+    if (currentSort?.key !== column) return <ArrowUpDown size={12} className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />;
+    return currentSort.direction === 'asc' 
+        ? <ArrowUp size={12} className="text-brand-blue" /> 
+        : <ArrowDown size={12} className="text-brand-blue" />;
+};
+
 const getRoleColor = (roleName: string) => {
+// ... existing getRoleColor logic ...
     if (!roleName) return { bg: '#F3F4F6', text: '#374151', border: '#E5E7EB' };
     
     // Generate a hash from the string
@@ -28,16 +38,48 @@ const getRoleColor = (roleName: string) => {
     };
 };
 
-export const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onDelete }) => (
+export const UserTable: React.FC<UserTableProps> = ({ users, sortConfig, onSort, onEdit, onDelete }) => (
     <div className="overflow-x-auto -mx-6">
         <table className="w-full text-left border-collapse">
             <thead>
                 <tr className="bg-gray-50/50">
-                    <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Usuario</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Rol</th>
+                    <th 
+                        className="px-6 py-4 cursor-pointer group hover:bg-gray-100/50 transition-colors border-b border-gray-100"
+                        onClick={() => onSort('name')}
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Usuario</span>
+                            <SortIcon column="name" currentSort={sortConfig} />
+                        </div>
+                    </th>
+                    <th 
+                        className="px-6 py-4 cursor-pointer group hover:bg-gray-100/50 transition-colors border-b border-gray-100"
+                        onClick={() => onSort('role')}
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Rol</span>
+                            <SortIcon column="role" currentSort={sortConfig} />
+                        </div>
+                    </th>
                     <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Sucursales</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Estado</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">Última Actividad</th>
+                    <th 
+                        className="px-6 py-4 cursor-pointer group hover:bg-gray-100/50 transition-colors border-b border-gray-100"
+                        onClick={() => onSort('status')}
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Estado</span>
+                            <SortIcon column="status" currentSort={sortConfig} />
+                        </div>
+                    </th>
+                    <th 
+                        className="px-6 py-4 cursor-pointer group hover:bg-gray-100/50 transition-colors border-b border-gray-100"
+                        onClick={() => onSort('lastActiveRaw')}
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Última Actividad</span>
+                            <SortIcon column="lastActiveRaw" currentSort={sortConfig} />
+                        </div>
+                    </th>
                     {(onEdit || onDelete) && <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 text-center">Acciones</th>}
                 </tr>
             </thead>
