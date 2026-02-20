@@ -17,17 +17,26 @@ export const RoleCard: React.FC<RoleCardProps> = ({ role, onEdit, onDelete }) =>
             key={role.id}
             className={`border-t-4 h-[300px] flex flex-col ${role.isProtected ? 'border-t-brand-dark' : 'border-t-blue-500'}`}
             footer={
-                <div className="flex gap-2">
+                <div className="flex gap-2 w-full relative group/tooltip">
                     {onEdit && (
                         <Button
                             variant="outline"
                             size="sm"
                             className="flex-1 gap-1.5"
-                            onClick={() => onEdit(role)}
+                            onClick={() => !role.isProtected && onEdit(role)}
+                            disabled={role.isProtected}
                         >
                             <Save size={14} />
                             Configurar Permisos
                         </Button>
+                    )}
+                    {role.isProtected && (
+                        <div className="absolute bottom-full left-0 mb-2 w-full opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none">
+                            <div className="bg-brand-dark text-white text-[10px] font-bold py-2 px-3 rounded-xl shadow-xl border border-white/10 text-center">
+                                Rol de sistema: Permisos fijos e inalterables
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-brand-dark"></div>
+                            </div>
+                        </div>
                     )}
                     {onDelete && !role.isProtected && (
                         <Button
