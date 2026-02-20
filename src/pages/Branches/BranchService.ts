@@ -17,5 +17,12 @@ export const branchService = {
         return await apiFetch(`/branches/${id}`, {
             method: 'DELETE',
         });
+    },
+
+    updateBranch: async (id: number, branchData: any) => {
+        return await apiFetch(`/branches/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(branchData),
+        });
     }
 };

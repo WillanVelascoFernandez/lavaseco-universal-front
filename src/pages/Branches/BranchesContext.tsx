@@ -31,8 +31,8 @@ export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }
                 userCount: b._count?.users || 0,
                 washerCount: b._count?.washers || 0,
                 dryerCount: b._count?.dryers || 0,
-                washerPrice: 15,
-                dryerPrice: 15
+                washerPrice: b.washerPrice || 0,
+                dryerPrice: b.dryerPrice || 0
             }));
             setBranches(adaptedBranches);
         } catch (error) {
@@ -57,13 +57,22 @@ export const BranchesProvider: React.FC<{ children: ReactNode }> = ({ children }
         }
     }, [isAuthenticated, hasPermission, fetchBranches]);
 
-    const updateBranchPrices = (branchId: string, washerPrice: number, dryerPrice: number, applyToAll: boolean) => {
-        setBranches(prev => prev.map(b => {
-            if (applyToAll || b.id.toString() === branchId) {
-                return { ...b, washerPrice, dryerPrice };
+    const updateBranchPrices = async (branchId: string, washerPrice: number, dryerPrice: number, applyToAll: boolean) => {
+        try {
+            if (applyToAll) {
+                // Update all branches in the backend
+                await Promise.all(branches.map(b => 
+                    branchService.updateBranch(b.id, { washerPrice, dryerPrice })
+                ));
+            } else {
+                // Update only the specific branch
+                await branchService.updateBranch(parseInt(branchId), { washerPrice, dryerPrice });
             }
-            return b;
-        }));
+            // Refresh the list to get updated data
+            await fetchBranches(false);
+        } catch (error) {
+            console.error('Error updating branch prices:', error);
+        }
     };
 
     return (
